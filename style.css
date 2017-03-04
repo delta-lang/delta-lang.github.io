@@ -1,0 +1,30 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    position: absolute;
+    width: 50%;
+    margin: auto 25%;
+    tab-size: 4;
+}
+
+textarea {
+    box-sizing: border-box;
+    font-family: monospace;
+    font-size: 13px;
+    width: 100%;
+    resize: none;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+#editor {
+    height: 50%;
+}
+
+#output {
+    height: 20%;
+}

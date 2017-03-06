@@ -6,12 +6,17 @@ var os = require('os');
 var child_process = require("child_process");
 
 var app = express();
-app.use(cors());
 app.use(bodyParser.json());
 
 var deltaPath = process.cwd() + "/delta/src/driver/delta";
 
-app.post("/run", function(req, res) {
+var corsOptions = {
+    origin: "https://delta-lang.github.io",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.options("/run", cors(corsOptions)); // enable pre-flight request for "/run"
+app.post("/run", cors(corsOptions), function(req, res) {
     if (!fs.existsSync("delta")) {
         console.log("ERROR: 'delta' directory doesn't exist, cwd = " + process.cwd());
         return res.send(JSON.stringify({ output: "Internal server error" }));

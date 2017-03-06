@@ -15,7 +15,7 @@ editor.onkeydown = function(e) {
 runButton.onclick = function() {
     output.value = "Running...";
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://emil.users.cs.helsinki.fi/run", true);
+    xhr.open("POST", "https://delta-sandbox.herokuapp.com/run", true);
     xhr.timeout = 5000;
     xhr.ontimeout = function() { output.value = "Timeout"; };
     xhr.onerror = function() { output.value = "Error"; };

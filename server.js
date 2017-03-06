@@ -1,10 +1,12 @@
 var express = require("express");
+var cors = require("cors");
 var bodyParser = require("body-parser");
 var fs = require("fs");
 var os = require('os');
 var child_process = require("child_process");
 
 var app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 var deltaPath = process.cwd() + "/delta/src/driver/delta";

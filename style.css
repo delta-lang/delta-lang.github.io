@@ -36,5 +36,5 @@ textarea:focus {
 .error {
     background-color: #fdd;
     padding: 0 4px;
-    white-space: pre;
+    white-space: pre-wrap;
 }

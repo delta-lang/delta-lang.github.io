@@ -1,8 +1,8 @@
-html, body {
+html, body, main {
     height: 100%;
 }
 
-body {
+main {
     position: absolute;
     width: 50%;
     margin: auto 25%;

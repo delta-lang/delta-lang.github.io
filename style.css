@@ -28,3 +28,7 @@ textarea:focus {
 #output {
     height: 20%;
 }
+
+.CodeMirror, textarea {
+    border: 1px solid #ddd;
+}

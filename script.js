@@ -1,16 +1,9 @@
-var editor = document.getElementById("editor");
+var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+    lineNumbers: true,
+    indentUnit: 4
+});
 var runButton = document.getElementById("run");
 var output = document.getElementById("output");
-
-// Handle tab key presses.
-editor.onkeydown = function(e) {
-    if (e.keyCode == 9 || e.which == 9) {
-        e.preventDefault();
-        var s = this.selectionStart;
-        this.value = this.value.substring(0, this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
-        this.selectionEnd = s + 1;
-    }
-};
 
 runButton.onclick = function() {
     output.value = "Running...";
@@ -29,5 +22,5 @@ runButton.onclick = function() {
         }
     };
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({ code: editor.value }));
+    xhr.send(JSON.stringify({ code: editor.getValue() }));
 };

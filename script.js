@@ -44,3 +44,13 @@ runButton.onclick = function() {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({ code: editor.getValue() }));
 };
+
+// Preserve editor contents on page refresh.
+window.onbeforeunload = function() {
+    localStorage.setItem("delta_sandbox_editor_contents", editor.getValue());
+}
+
+window.onload = function() {
+    var contents = localStorage.getItem("delta_sandbox_editor_contents");
+    if (contents) editor.setValue(contents);
+}

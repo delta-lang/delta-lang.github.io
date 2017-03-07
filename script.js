@@ -2,10 +2,29 @@ var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     lineNumbers: true,
     indentUnit: 4
 });
+var widgets = [];
 var runButton = document.getElementById("run");
 var output = document.getElementById("output");
 
+function highlightError() {
+    if (!output.value.match(/main.delta:\d+:\d+: error:.*/)) return; // no error
+    var components = output.value.split(":");
+    var position = { line: components[1] - 1, ch: components[2] - 1 };
+    var errorMessage = output.value.split("\n")[2] + output.value.match(/error:.*/)[0].slice(6);
+
+    var node = document.createElement("div");
+    node.appendChild(document.createTextNode(errorMessage));
+    node.className = "error";
+    widgets.push(editor.addLineWidget(position.line, node, true));
+}
+
+function removeErrors() {
+    for (var i = 0; i < widgets.length; ++i) widgets[i].clear();
+    widgets.length = 0;
+}
+
 runButton.onclick = function() {
+    removeErrors();
     output.value = "Running...";
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "https://delta-sandbox.herokuapp.com/run", true);
@@ -16,6 +35,7 @@ runButton.onclick = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 output.value = JSON.parse(xhr.response).output;
+                highlightError();
             } else {
                 output.value = "Error: " + xhr.statusText;
             }

@@ -1,4 +1,5 @@
 var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+    mode: "delta",
     lineNumbers: true,
     indentUnit: 4
 });

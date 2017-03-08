@@ -14,3 +14,8 @@ make
 # Reduce size for Heroku slug compression.
 rm -rf cmake-3.1.3-Linux-x86_64
 rm -rf boost_1_63_0
+mkdir -p ../bin ../lib/clang/3.9.0
+mv clang+llvm-3.9.0-x86_64-linux-gnu-ubuntu-14.04/bin/clang-3.9 ../bin/clang
+mv clang+llvm-3.9.0-x86_64-linux-gnu-ubuntu-14.04/lib/clang/3.9.0/include ../lib/clang/3.9.0
+rm -rf clang+llvm-3.9.0-x86_64-linux-gnu-ubuntu-14.04
+rm src/**/*.a

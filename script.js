@@ -29,8 +29,6 @@ runButton.onclick = function() {
     output.value = "Running...";
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "https://delta-sandbox.herokuapp.com/run", true);
-    xhr.timeout = 5000;
-    xhr.ontimeout = function() { output.value = "Timeout, try again in a while."; };
     xhr.onerror = function(error) { output.value = "Error: " + error.message; };
     xhr.onload = function() {
         if (xhr.readyState === 4) {

@@ -24,14 +24,21 @@ function removeErrors() {
     widgets.length = 0;
 }
 
+var outputUpdater;
+
 runButton.onclick = function() {
     removeErrors();
     output.value = "Running...";
+    outputUpdater = setInterval(function() { output.value += "."; }, 1000);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "https://delta-sandbox.herokuapp.com/run", true);
-    xhr.onerror = function(error) { output.value = "Error: " + error.message; };
+    xhr.onerror = function(error) {
+        clearInterval(outputUpdater);
+        output.value = "Error: " + error.message;
+    };
     xhr.onload = function() {
         if (xhr.readyState === 4) {
+            clearInterval(outputUpdater);
             if (xhr.status === 200) {
                 output.value = JSON.parse(xhr.response).output;
                 highlightError();

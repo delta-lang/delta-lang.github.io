@@ -4,7 +4,8 @@ An online compiler frontend for the [Delta programming language](https://github.
 A live instance is running [here](https://delta-lang.github.io/delta-sandbox).
 
 This frontend simply sends the submitted code to the backend to be compiled
-and run. The backend server is deployed on Heroku and is not yet open-source.
+and run. The [backend server](https://github.com/delta-lang/delta-sandbox-backend)
+is deployed on Heroku.
 
 ## Usage
 

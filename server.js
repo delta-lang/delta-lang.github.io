@@ -8,6 +8,8 @@ var child_process = require("child_process");
 var app = express();
 app.use(bodyParser.json());
 
+var isProduction = process.env.NODE_ENV === "production";
+var importSearchPathFlags = isProduction ? [`-I${process.cwd()}/delta`] : [];
 var deltaPath = process.argv[2] || process.cwd() + "/delta/src/driver/delta";
 
 if (child_process.spawnSync(deltaPath, ["-help"]).error) {
@@ -27,7 +29,8 @@ app.post("/run", cors(corsOptions), function(req, res) {
     var dir = os.tmpdir();
     fs.writeFile(dir + "/main.delta", req.body.code, function(error) {
         if (error) return res.send(JSON.stringify({ output: error.toString() }))
-        var output = child_process.execFileSync("./runner.js", [dir.toString(), deltaPath]);
+        var args = [dir.toString(), deltaPath].concat(importSearchPathFlags);
+        var output = child_process.execFileSync("./runner.js", args);
         res.send(JSON.stringify({ output: output.toString() }));
     });
 });

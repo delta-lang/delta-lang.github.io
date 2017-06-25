@@ -2,6 +2,10 @@ html, body, main {
     height: 100%;
 }
 
+h1 {
+    text-align: center;
+}
+
 main {
     position: absolute;
     width: 50%;

@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "preinstall": "./install_delta.sh",
+    "preinstall": "[ \"$NODE_ENV\" != production ] && exit 0; ./install_delta.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "emlai",

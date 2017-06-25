@@ -1,16 +1,18 @@
 # Delta Sandbox
 
-An online compiler frontend for the [Delta programming language](https://github.com/delta-lang/delta).
+An online compiler for the [Delta programming language](https://github.com/delta-lang/delta).
 A live instance is running [here](https://delta-lang.github.io/delta-sandbox).
 
-This frontend simply sends the submitted code to the backend to be compiled
-and run. The [backend server](https://github.com/delta-lang/delta-sandbox-backend)
-is deployed on Heroku.
+The frontend simply sends the submitted code to the backend to be compiled and
+run. The backend server is deployed on Heroku.
 
 ## Usage
 
 To run the frontend locally, just open the [index.html](index.html) file in a
 web browser.
+
+To start the server, first install its dependencies with `npm install` and then
+run `npm start`.
 
 ## Contributing
 

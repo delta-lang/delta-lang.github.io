@@ -12,7 +12,8 @@ To run the frontend locally, just open the [index.html](index.html) file in a
 web browser.
 
 To start the server, first install its dependencies with `npm install` and then
-run `npm start`.
+run `npm start`. You can supply the path to your local Delta compiler executable
+as an argument to `npm start`.
 
 ## Contributing
 

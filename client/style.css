@@ -42,3 +42,7 @@ textarea:focus {
     padding: 0 4px;
     white-space: pre-wrap;
 }
+
+.github-corner svg {
+    z-index: 1;
+}

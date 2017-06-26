@@ -2,7 +2,13 @@ html, body, main {
     height: 100%;
 }
 
+body {
+    margin: 0;
+}
+
 h1 {
+    margin: 0;
+    padding: 20px;
     text-align: center;
 }
 

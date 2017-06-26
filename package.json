@@ -2,9 +2,9 @@
   "name": "delta-sandbox",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
   "scripts": {
-    "preinstall": "[ \"$NODE_ENV\" != production ] && exit 0; ./install_delta.sh",
+    "start": "node server/server.js",
+    "preinstall": "[ \"$NODE_ENV\" != production ] && exit 0; server/install_delta.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "emlai",

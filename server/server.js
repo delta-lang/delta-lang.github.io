@@ -30,7 +30,7 @@ app.post("/run", cors(corsOptions), function(req, res) {
     fs.writeFile(dir + "/main.delta", req.body.code, function(error) {
         if (error) return res.send(JSON.stringify({ output: error.toString() }))
         var args = [dir.toString(), deltaPath].concat(importSearchPathFlags);
-        var output = child_process.execFileSync("./runner.js", args);
+        var output = child_process.execFileSync(`${__dirname}/runner.js`, args);
         res.send(JSON.stringify({ output: output.toString() }));
     });
 });

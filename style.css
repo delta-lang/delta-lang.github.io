@@ -7,9 +7,9 @@ h1 {
 }
 
 main {
-    position: absolute;
     width: 50%;
-    margin: auto 25%;
+    min-width: 480px;
+    margin: auto;
     tab-size: 4;
 }
 

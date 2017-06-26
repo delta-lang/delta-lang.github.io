@@ -60,3 +60,10 @@ window.onload = function() {
     var contents = localStorage.getItem("delta_sandbox_editor_contents");
     if (contents) editor.setValue(contents);
 }
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "s" && (event.ctrlKey || event.metaKey)) {
+        runButton.click();
+        event.preventDefault();
+    }
+});

@@ -1,0 +1,24 @@
+import "stdlib.h"
+import "time.h"
+
+class WordRandomizer {
+    const words: string[]&
+
+    init(words: string[]&) {
+        this.words = words
+        srand(uint(time(null)))
+    }
+
+    func randomWord() -> string {
+        return words[rand() % words.count]
+    }
+}
+
+func main() {
+    const words = ["hello", "world", "from", "Delta"]
+    const wordRandomizer = WordRandomizer(&words)
+
+    for (i in 0...5) {
+        print(wordRandomizer.randomWord())
+    }
+}

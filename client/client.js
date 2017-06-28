@@ -58,7 +58,16 @@ window.onbeforeunload = function() {
 
 window.onload = function() {
     var contents = localStorage.getItem("delta_sandbox_editor_contents");
-    if (contents) editor.setValue(contents);
+    if (contents) {
+        editor.setValue(contents);
+    } else {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "examples/WordRandomizer.delta");
+        xhr.onreadystatechange = function() {
+            editor.setValue(xhr.responseText);
+        };
+        xhr.send();
+    }
 }
 
 document.addEventListener("keydown", function(event) {

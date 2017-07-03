@@ -1,11 +1,13 @@
+DELTA_VERSION=$(cat "$(dirname $0)/.delta-version")
 LLVM_LONG_VERSION=4.0.0
 LLVM_SHORT_VERSION=4.0
 
 if [ ! -d delta ]; then
-    git clone --depth=1 https://github.com/delta-lang/delta.git
+    git clone https://github.com/delta-lang/delta.git
 fi
 
 cd delta
+git checkout $DELTA_VERSION
 
 curl -L "https://cmake.org/files/v3.1/cmake-3.1.3-Linux-x86_64.tar.gz" | tar xz
 curl -L "http://releases.llvm.org/$LLVM_LONG_VERSION/clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-14.04.tar.xz" | tar xJ

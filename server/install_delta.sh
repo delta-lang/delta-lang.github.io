@@ -1,3 +1,5 @@
+set -e
+
 DELTA_VERSION=$(cat "$(dirname $0)/.delta-version")
 LLVM_LONG_VERSION=4.0.0
 LLVM_SHORT_VERSION=4.0
@@ -24,4 +26,4 @@ mkdir -p ../bin ../lib/clang/$LLVM_LONG_VERSION
 mv clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-14.04/bin/clang-$LLVM_SHORT_VERSION ../bin/clang
 mv clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-14.04/lib/clang/$LLVM_LONG_VERSION/include ../lib/clang/$LLVM_LONG_VERSION
 rm -rf clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-14.04
-rm src/**/*.a
+rm -f src/**/*.a

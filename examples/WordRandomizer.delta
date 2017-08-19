@@ -2,7 +2,7 @@ import "stdlib.h"
 import "time.h"
 
 class WordRandomizer {
-    const words: string[]&
+    let words: string[]&
 
     init(words: string[]&) {
         this.words = words
@@ -15,8 +15,8 @@ class WordRandomizer {
 }
 
 func main() {
-    const words = ["hello", "world", "from", "Delta"]
-    const wordRandomizer = WordRandomizer(&words)
+    let words = ["hello", "world", "from", "Delta"]
+    let wordRandomizer = WordRandomizer(&words)
 
     for (i in 0...5) {
         print(wordRandomizer.randomWord())

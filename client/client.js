@@ -62,7 +62,7 @@ window.onload = function() {
         editor.setValue(contents);
     } else {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "examples/WordRandomizer.delta");
+        xhr.open("GET", "examples/FizzBuzz.delta");
         xhr.onreadystatechange = function() {
             editor.setValue(xhr.responseText);
         };

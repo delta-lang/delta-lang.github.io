@@ -20,7 +20,7 @@ if (child_process.spawnSync(deltaPath, ["-help"]).error) {
 }
 
 var corsOptions = {
-    origin: "https://delta-lang.github.io",
+    origin: "*",
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 

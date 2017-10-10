@@ -2,6 +2,7 @@
   "name": "delta-sandbox",
   "version": "1.0.0",
   "description": "",
+  "repository": "https://github.com/delta-lang/delta-sandbox",
   "scripts": {
     "start": "node server/server.js",
     "preinstall": "[ \"$NODE_ENV\" != production ] && exit 0; server/install_delta.sh",

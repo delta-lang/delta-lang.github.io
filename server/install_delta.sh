@@ -16,9 +16,10 @@ curl -L "http://releases.llvm.org/$LLVM_LONG_VERSION/clang+llvm-$LLVM_LONG_VERSI
 
 cmake-3.1.3-Linux-x86_64/bin/cmake . \
     -G 'Unix Makefiles' \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_CXX_FLAGS='-D_GLIBCXX_USE_CXX11_ABI=0' \
     -DCMAKE_PREFIX_PATH=$PWD/clang+llvm-$LLVM_LONG_VERSION-linux-x86_64-ubuntu14.04
-make
+make -j
 
 # Reduce size for Heroku slug compression.
 rm -rf cmake-3.1.3-Linux-x86_64

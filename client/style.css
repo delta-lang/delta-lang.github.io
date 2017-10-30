@@ -21,8 +21,6 @@ main {
 
 textarea {
     box-sizing: border-box;
-    font-family: monospace;
-    font-size: 13px;
     width: 100%;
     resize: none;
 }
@@ -41,6 +39,9 @@ textarea:focus {
 
 .CodeMirror, textarea {
     border: 1px solid #ddd;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 .error {

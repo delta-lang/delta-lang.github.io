@@ -29,7 +29,9 @@ var outputUpdater;
 runButton.onclick = function() {
     removeErrors();
     output.value = "Running...";
-    outputUpdater = setInterval(function() { output.value += "."; }, 1000);
+    outputUpdater = setInterval(function() {
+        output.value += ".";
+    }, 1000);
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "https://delta-sandbox.herokuapp.com/run", true);
     xhr.onerror = function(error) {
@@ -54,7 +56,7 @@ runButton.onclick = function() {
 // Preserve editor contents on page refresh.
 window.onbeforeunload = function() {
     localStorage.setItem("delta_sandbox_editor_contents", editor.getValue());
-}
+};
 
 window.onload = function() {
     var contents = localStorage.getItem("delta_sandbox_editor_contents");
@@ -68,7 +70,7 @@ window.onload = function() {
         };
         xhr.send();
     }
-}
+};
 
 document.addEventListener("keydown", function(event) {
     if (event.key === "s" && (event.ctrlKey || event.metaKey)) {

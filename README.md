@@ -15,6 +15,8 @@ To start the server, first install its dependencies with `npm install` and then
 run `npm start`. You can supply the path to your local Delta compiler executable
 as an argument to `npm start`.
 
+To format the code, run `npm run format`.
+
 ## Contributing
 
 Delta Sandbox is open-source software. Contributions are welcome and encouraged!

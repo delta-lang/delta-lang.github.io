@@ -2,7 +2,7 @@ var express = require("express");
 var cors = require("cors");
 var bodyParser = require("body-parser");
 var fs = require("fs");
-var os = require('os');
+var os = require("os");
 var child_process = require("child_process");
 
 var app = express();
@@ -28,7 +28,7 @@ app.options("/run", cors(corsOptions)); // enable pre-flight request for "/run"
 app.post("/run", cors(corsOptions), function(req, res) {
     var dir = os.tmpdir();
     fs.writeFile(dir + "/main.delta", req.body.code, function(error) {
-        if (error) return res.send(JSON.stringify({ output: error.toString() }))
+        if (error) return res.send(JSON.stringify({ output: error.toString() }));
         var args = [dir.toString(), deltaPath].concat(importSearchPathFlags);
         var output = child_process.execFileSync(`${__dirname}/runner.js`, args);
         res.send(JSON.stringify({ output: output.toString() }));

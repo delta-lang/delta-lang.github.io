@@ -19,8 +19,8 @@ CodeMirror.defineMode("delta", function(config) {
 
   var keywords = {
     "break":true, "case":true, "cast":true, "catch":true, "class":true, "const":true,
-    "continue":true, "default":true, "defer":true, "deinit":true, "do":true, "else":true,
-    "enum":true, "extern":true, "fallthrough":true, "for":true, "func":true, "if":true,
+    "continue":true, "def":true, "default":true, "defer":true, "deinit":true, "do":true,
+    "else":true, "enum":true, "extern":true, "fallthrough":true, "for":true, "if":true,
     "import":true, "init":true, "inout":true, "interface":true, "let":true, "move":true,
     "mutable":true, "mutating":true, "private":true, "public":true, "return":true, "static":true,
     "struct":true, "switch":true, "this":true, "throw":true, "throws":true, "try":true,

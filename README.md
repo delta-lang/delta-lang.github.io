@@ -1,7 +1,7 @@
 # Delta Sandbox
 
 An online compiler for the [Delta programming language](https://github.com/delta-lang/delta).
-A live instance is running [here](https://delta-lang.github.io/delta-sandbox).
+A live instance is running [here](https://delta-lang.github.io/sandbox.html).
 
 The frontend simply sends the submitted code to the backend to be compiled and
 run. The backend server is deployed on Heroku.

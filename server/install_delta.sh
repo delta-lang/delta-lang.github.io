@@ -1,8 +1,7 @@
 set -e
 
 DELTA_VERSION=$(cat "$(dirname $0)/.delta-version")
-LLVM_LONG_VERSION=5.0.0
-LLVM_SHORT_VERSION=5.0
+LLVM_LONG_VERSION=7.0.1
 
 if [ ! -d delta ]; then
     git clone --recursive https://github.com/delta-lang/delta.git
@@ -11,20 +10,19 @@ fi
 cd delta
 git checkout $DELTA_VERSION
 
-curl -L "https://cmake.org/files/v3.1/cmake-3.1.3-Linux-x86_64.tar.gz" | tar xz
-curl -L "http://releases.llvm.org/$LLVM_LONG_VERSION/clang+llvm-$LLVM_LONG_VERSION-linux-x86_64-ubuntu14.04.tar.xz" | tar xJ
+curl -L "https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0-Linux-x86_64.tar.gz" | tar xz
+curl -L "http://releases.llvm.org/$LLVM_LONG_VERSION/clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04.tar.xz" | tar xJ
 
-cmake-3.1.3-Linux-x86_64/bin/cmake . \
+cmake-3.15.0-Linux-x86_64/bin/cmake . \
     -G 'Unix Makefiles' \
     -DCMAKE_BUILD_TYPE=Debug \
-    -DCMAKE_CXX_FLAGS='-D_GLIBCXX_USE_CXX11_ABI=0' \
-    -DCMAKE_PREFIX_PATH=$PWD/clang+llvm-$LLVM_LONG_VERSION-linux-x86_64-ubuntu14.04
+    -DCMAKE_PREFIX_PATH=$PWD/clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04
 make -j
 
 # Reduce size for Heroku slug compression.
-rm -rf cmake-3.1.3-Linux-x86_64
+rm -rf cmake-3.15.0-Linux-x86_64
 mkdir -p ../bin ../lib/clang/$LLVM_LONG_VERSION
-mv clang+llvm-$LLVM_LONG_VERSION-linux-x86_64-ubuntu14.04/bin/clang-$LLVM_SHORT_VERSION ../bin/clang
-mv clang+llvm-$LLVM_LONG_VERSION-linux-x86_64-ubuntu14.04/lib/clang/$LLVM_LONG_VERSION/include ../lib/clang/$LLVM_LONG_VERSION
-rm -rf clang+llvm-$LLVM_LONG_VERSION-linux-x86_64-ubuntu14.04
+mv clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04/bin/clang ../bin/clang
+mv clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04/lib/clang/$LLVM_LONG_VERSION/include ../lib/clang/$LLVM_LONG_VERSION
+rm -rf clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04
 rm -f src/**/*.a

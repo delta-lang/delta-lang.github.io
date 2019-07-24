@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 var isProduction = process.env.NODE_ENV === "production";
 var importSearchPathFlags = isProduction ? [`-I${process.cwd()}/delta`] : [];
-var deltaPath = process.argv[2] || process.cwd() + "/delta/src/delta/delta";
+var deltaPath = process.argv[2] || process.cwd() + "/delta/delta";
 
 if (child_process.spawnSync(deltaPath, ["-help"]).error) {
     console.error(`Invalid path '${deltaPath}'`);

@@ -64,7 +64,7 @@ window.onload = function() {
         editor.setValue(contents);
     } else {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "examples/FizzBuzz.delta");
+        xhr.open("GET", "examples/hello_world.delta");
         xhr.onreadystatechange = function() {
             editor.setValue(xhr.responseText);
         };

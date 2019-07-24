@@ -2,7 +2,7 @@
   "name": "delta-sandbox",
   "version": "1.0.0",
   "description": "",
-  "repository": "https://github.com/delta-lang/delta-sandbox",
+  "repository": "https://github.com/delta-lang/delta-lang.github.io",
   "scripts": {
     "format": "prettier --write ./**/*.js ./**/*.css",
     "start": "node server/server.js",

@@ -17,7 +17,7 @@ cmake-3.15.0-Linux-x86_64/bin/cmake . \
     -G 'Unix Makefiles' \
     -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_PREFIX_PATH=$PWD/clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04
-make -j
+make
 
 # Reduce size for Heroku slug compression.
 rm -rf cmake-3.15.0-Linux-x86_64

@@ -9,7 +9,7 @@ var stdlibImportSearchPathFlag = process.argv[4] || "";
 process.chdir(dir);
 
 try {
-    child_process.execSync(`${deltaPath} main.delta ${stdlibImportSearchPathFlag}`);
+    child_process.execSync(`${deltaPath} main.delta ${stdlibImportSearchPathFlag}`, { env: { DELTA_PRINT_STACK_TRACE: '1' } });
 } catch (error) {
     console.log(error.stdout.toString());
     process.exit();

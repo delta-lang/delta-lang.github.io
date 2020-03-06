@@ -28,10 +28,21 @@ app.options("/run", cors(corsOptions)); // enable pre-flight request for "/run"
 app.post("/run", cors(corsOptions), function(req, res) {
     var dir = os.tmpdir();
     fs.writeFile(dir + "/main.delta", req.body.code, function(error) {
-        if (error) return res.send(JSON.stringify({ output: error.toString() }));
-        var args = [dir.toString(), deltaPath].concat(importSearchPathFlags);
-        var output = child_process.execFileSync(`${__dirname}/runner.js`, args);
-        res.send(JSON.stringify({ output: output.toString() }));
+        if (error) {
+            console.error(error.stack);
+            return res.send(JSON.stringify({ output: error.stack }));
+        }
+
+        var args = [`${__dirname}/runner.js`, dir.toString(), deltaPath, ...importSearchPathFlags];
+
+        child_process.execFile("node", args, function(error, stdout, stderr) {
+            if (error) {
+                console.error(error.stack);
+                return res.send(JSON.stringify({ output: error.stack }));
+            }
+
+            res.send(JSON.stringify({ output: stdout.toString() + '\n' + stderr.toString() }));
+        });
     });
 });
 

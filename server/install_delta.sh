@@ -1,7 +1,6 @@
 set -e
 
 DELTA_VERSION=$(cat "$(dirname $0)/.delta-version")
-LLVM_LONG_VERSION=7.0.1
 
 if [ ! -d delta ]; then
     git clone --recursive https://github.com/delta-lang/delta.git
@@ -9,6 +8,9 @@ fi
 
 cd delta
 git checkout $DELTA_VERSION
+
+# Parse LLVM version from Travis config.
+LLVM_LONG_VERSION=$(grep -oP 'LLVM_VERSION=(\K.*)' .travis.yml)
 
 curl -L "https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0-Linux-x86_64.tar.gz" | tar xz
 curl -L "http://releases.llvm.org/$LLVM_LONG_VERSION/clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04.tar.xz" | tar xJ

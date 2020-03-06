@@ -9,9 +9,17 @@ var stdlibImportSearchPathFlag = process.argv[4] || "";
 process.chdir(dir);
 
 try {
-    child_process.execSync(`${deltaPath} main.delta ${stdlibImportSearchPathFlag}`, { env: { DELTA_PRINT_STACK_TRACE: '1' } });
+    var command = [
+        deltaPath,
+        "main.delta",
+        "-B/app/.apt/usr/lib/x86_64-linux-gnu",
+        "-static",
+        stdlibImportSearchPathFlag
+    ];
+    child_process.execSync(command.join(' '));
 } catch (error) {
     console.log(error.stdout.toString());
+    console.log(error.stderr.toString());
     process.exit();
 }
 

@@ -25,23 +25,39 @@ var corsOptions = {
 };
 
 app.options("/run", cors(corsOptions)); // enable pre-flight request for "/run"
+
 app.post("/run", cors(corsOptions), function(req, res) {
     var dir = os.tmpdir();
+
     fs.writeFile(dir + "/main.delta", req.body.code, function(error) {
         if (error) {
             console.error(error.stack);
-            return res.send(JSON.stringify({ output: error.stack }));
+            return res.send(JSON.stringify({ stderr: error.stack }));
         }
 
-        var args = [`${__dirname}/runner.js`, dir.toString(), deltaPath, ...importSearchPathFlags];
+        process.chdir(dir); // Run from source directory to keep error messages short.
 
-        child_process.execFile("node", args, function(error, stdout, stderr) {
+        var args = [
+            "run",
+            "main.delta",
+            "-B/app/.apt/usr/lib/x86_64-linux-gnu",
+            "-static",
+            ...importSearchPathFlags
+        ];
+
+        child_process.execFile(deltaPath, args, { timeout: 5000 }, function(error, stdout, stderr) {
             if (error) {
                 console.error(error.stack);
-                return res.send(JSON.stringify({ output: error.stack }));
+
+                if ((!stdout || !stdout.toString()) && (!stderr && !stderr.toString())) {
+                    return res.send(JSON.stringify({ stderr: error.stack }));
+                }
             }
 
-            res.send(JSON.stringify({ output: stdout.toString() + '\n' + stderr.toString() }));
+            res.send(JSON.stringify({
+                stdout: stdout.toString(),
+                stderr: stderr.toString()
+            }));
         });
     });
 });

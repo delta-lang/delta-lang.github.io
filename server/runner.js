@@ -11,21 +11,15 @@ process.chdir(dir);
 try {
     var command = [
         deltaPath,
+        "run",
         "main.delta",
         "-B/app/.apt/usr/lib/x86_64-linux-gnu",
         "-static",
         stdlibImportSearchPathFlag
     ];
-    child_process.execSync(command.join(' '));
+    var output = child_process.execSync(command.join(' '), { timeout: 5000 });
+    console.log(output.toString());
 } catch (error) {
     console.log(error.stdout.toString());
     console.log(error.stderr.toString());
-    process.exit();
-}
-
-try {
-    var output = child_process.execSync("./a.out", { timeout: 3000 });
-    console.log(output.toString());
-} catch (error) {
-    console.log(error.toString());
 }

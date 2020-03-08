@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Delta</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="delta.css">
+<script src="lib/codemirror.js"></script>
+<link rel="stylesheet" href="index.css">
+<script src="delta.js"></script>
+<script src="editor.js"></script>
+
+<div class="top-nav">
+    <h1><a href="./index.html">Delta</a></h1>
+    <div class="links">
+        <a href="./introduction.html">Documentation</a>
+        <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
+        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+    </div>
+</div>
+<div class="side-nav">
+    <ul>
+        <li><a href="./introduction.html">Introduction</a></li>
+        <li><a href="./hello-world.html">Hello world!</a></li>
+        <li><a href="./variables-and-constants.html">Variables and constants</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./control-flow.html">Control flow</a></li>
+        <li><a href="./builtin-types.html">Builtin types</a></li>
+        <li><a href="./structs.html">Structs</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./strings.html">Strings</a></li>
+        <li><a href="./pointers.html">Pointers</a></li>
+        <li><a href="./nullable-types.html">Nullable types</a></li>
+        <li><a href="./enum-types.html">Enum types</a></li>
+        <li><a href="./iterators.html">Iterators</a></li>
+        <li><a href="./interfaces.html">Interfaces</a></li>
+        <li><a href="./generics.html">Generics</a></li>
+        <li><a href="./low-level-programming.html">Low-level programming</a></li>
+        <li><a href="./std.html">Standard library reference</a></li>
+        <!-- <li><a href="./design.html">Design document</a></li> -->
+        <!-- <li><a href="./spec.html">Specification</a></li> -->
+    </ul>
+</div>
+
+<script>
+    var currentPage = window.location.pathname.split("/").pop();
+    var link = document.querySelector(".side-nav a[href='./" + currentPage + "']");
+    link.className = "active";
+</script>
+<h1 id="builtin-types">Builtin types</h1>
+<table style="width:100%;">
+<colgroup>
+<col width="13%" />
+<col width="86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Type</th>
+<th align="left">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>int</code></td>
+<td align="left">32-bit signed integer, default type for integer literals</td>
+</tr>
+<tr class="even">
+<td align="left"><code>int8</code></td>
+<td align="left">8-bit signed integer</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>int16</code></td>
+<td align="left">16-bit signed integer</td>
+</tr>
+<tr class="even">
+<td align="left"><code>int32</code></td>
+<td align="left">32-bit signed integer</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>int64</code></td>
+<td align="left">64-bit signed integer</td>
+</tr>
+<tr class="even">
+<td align="left"><code>uint</code></td>
+<td align="left">32-bit unsigned integer</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>uint8</code></td>
+<td align="left">8-bit unsigned integer</td>
+</tr>
+<tr class="even">
+<td align="left"><code>uint16</code></td>
+<td align="left">16-bit unsigned integer</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>uint32</code></td>
+<td align="left">32-bit unsigned integer</td>
+</tr>
+<tr class="even">
+<td align="left"><code>uint64</code></td>
+<td align="left">64-bit unsigned integer</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>float</code></td>
+<td align="left">32-bit floating-point number, default type for floating-point literals</td>
+</tr>
+<tr class="even">
+<td align="left"><code>float32</code></td>
+<td align="left">32-bit floating-point number</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>float64</code></td>
+<td align="left">64-bit floating-point number</td>
+</tr>
+<tr class="even">
+<td align="left"><code>bool</code></td>
+<td align="left">boolean</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>char</code></td>
+<td align="left">C/C++ <code>char</code> type</td>
+</tr>
+</tbody>
+</table>
+<h2 id="arithmetic-operators">Arithmetic operators</h2>
+<p>There are the usual arithmetic operators <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, <code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code>, and the compound assignment counterparts for the binary operators: <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>&amp;&amp;=</code>, <code>||=</code>, <code>&amp;=</code>, <code>|=</code>, <code>^=</code>, <code>&lt;&lt;=</code>, <code>&gt;&gt;=</code>.</p>
+<p>An important thing to note about <code>+</code>, <code>-</code>, and <code>*</code> is that they don't silently wrap on overflow. Instead they raise an error (in checked mode), or invoke undefined behavior (in unchecked mode) (not implemented yet). The wrapping behavior can be enabled for individual operations with a special syntax (not implemented yet).</p>
+<h3 id="increment-and-decrement-operators">Increment and decrement operators</h3>
+<p>The increment and decrement operators, written as postfix <code>++</code> and <code>--</code>, respectively, increment/decrement their operand by one. They can only be used as standalone statements, not inside arbitrary expressions.</p>
+<hr />
+<h2 id="future-additions">Future additions</h2>
+<ul>
+<li>More builtin types, such as <code>byte</code>, <code>double</code>, <code>long</code>, <code>short</code>, may be added in the future.</li>
+<li>The language might provide an exponentiation operator in the future.</li>
+</ul>
+</body>
+</html>

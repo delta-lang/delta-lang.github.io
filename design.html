@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Delta</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="delta.css">
+<script src="lib/codemirror.js"></script>
+<link rel="stylesheet" href="index.css">
+<script src="delta.js"></script>
+<script src="editor.js"></script>
+
+<div class="top-nav">
+    <h1><a href="./index.html">Delta</a></h1>
+    <div class="links">
+        <a href="./introduction.html">Documentation</a>
+        <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
+        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+    </div>
+</div>
+<div class="side-nav">
+    <ul>
+        <li><a href="./introduction.html">Introduction</a></li>
+        <li><a href="./hello-world.html">Hello world!</a></li>
+        <li><a href="./variables-and-constants.html">Variables and constants</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./control-flow.html">Control flow</a></li>
+        <li><a href="./builtin-types.html">Builtin types</a></li>
+        <li><a href="./structs.html">Structs</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./strings.html">Strings</a></li>
+        <li><a href="./pointers.html">Pointers</a></li>
+        <li><a href="./nullable-types.html">Nullable types</a></li>
+        <li><a href="./enum-types.html">Enum types</a></li>
+        <li><a href="./iterators.html">Iterators</a></li>
+        <li><a href="./interfaces.html">Interfaces</a></li>
+        <li><a href="./generics.html">Generics</a></li>
+        <li><a href="./low-level-programming.html">Low-level programming</a></li>
+        <li><a href="./std.html">Standard library reference</a></li>
+        <!-- <li><a href="./design.html">Design document</a></li> -->
+        <!-- <li><a href="./spec.html">Specification</a></li> -->
+    </ul>
+</div>
+
+<script>
+    var currentPage = window.location.pathname.split("/").pop();
+    var link = document.querySelector(".side-nav a[href='./" + currentPage + "']");
+    link.className = "active";
+</script>
+<h1 id="delta-language-design-document">Delta Language Design Document</h1>
+<p>This document describes the design decisions and rationales for the Delta programming language, and provides guidelines and resources for further design.</p>
+<p><strong>Note:</strong> This document is incomplete.</p>
+<h2 id="introduction">Introduction</h2>
+<blockquote>
+<p>Within C++, there is a much smaller and cleaner language struggling to get out.</p>
+<p>— Bjarne Stroustrup</p>
+</blockquote>
+<p>Delta is a general-purpose programming language with a bias towards systems programming, intended primarily as a replacement for C++ and C. It is designed for applications where runtime performance and programmer productivity matter. It should also support large-scale development, and limited interoperability with existing C++ and C code to make gradual adoption feasible.</p>
+<h3 id="principles">Principles</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Progressive_disclosure">Progressive disclosure</a> of complexity, i.e. it should be easy to write most of the code (the parts that aren't performance bottlenecks) to perform reasonably efficiently, and the language should provide full control to optimize the bottlenecks.</li>
+<li>Code compiled in release mode must be as fast as possible on modern hardware.</li>
+<li>Compilation in debug mode should be as fast as possible to speed up the edit-compile-run cycle during development.</li>
+<li>Be able to interoperate with C++ code to a certain degree, to avoid having to write a C wrapper for everything. However this should not restrict the design of the language.</li>
+<li>Safe by default, but allow disabling safety checks (both individually and collectively) easily where necessary. E.g. array access bounds checking, integer overflow detection.</li>
+<li>The language should be relatively simple, but most of the perceived simplicity should come from the aforementioned progressive disclosure principle. For simple things: &quot;There should be one — and preferably only one — obvious way to do it.&quot;</li>
+<li>Should support large-scale development, e.g. fast build times, strong type system, easy greppability of function/type/variable definitions.</li>
+<li>Should be familiar and attractive to C++ and C developers. I.e. try not to change too much. Only change things that are an objective improvement from C++ or otherwise well justified.</li>
+</ul>
+<h2 id="why-delta-instead-of-c-or-rust">Why Delta instead of C++ or Rust?</h2>
+<p>C++ is a large and complex language that has accumulated many problems over the years, for example:</p>
+<ul>
+<li>No standard build system.</li>
+<li>No standard way to manage dependencies.</li>
+<li>Header files and the code duplication they cause.</li>
+<li>Functions and types must be declared before using them, resulting in forward declarations as a language feature.</li>
+<li>Source code compatibility with C.</li>
+<li>Slow compilation times for large projects.</li>
+<li>Syntax is overly verbose in some cases (think lambdas, smart pointers).</li>
+<li>No compile-time reflection (ever wanted to iterate over the values of an enum?).</li>
+<li>Too many implicit conversion between data types, which cause bugs too easily.</li>
+<li>Mutability by default.</li>
+<li>No proper tagged union type (no, <code>std::variant</code> <a href="https://bitbashing.io/std-visit.html">doesn't count</a>).</li>
+<li>Poor support for functional programming.</li>
+<li>Deep copying is implicit, while moving is explicit (in most cases).</li>
+<li>Switch case-statement fallthrough is implicit, requires explicit <code>break</code> to avoid.</li>
+<li>No named parameters.</li>
+<li>Writing cross-platform code is harder than it needs to be (mostly as a result of different platforms and compilers doing things differently).</li>
+<li>Has both pointers and references, and problems associated with both of them (e.g. no way to express non-nullable reassignable pointers, without resorting to a class like <code>std::reference_wrapper</code>). No non-nullable smart pointers.</li>
+<li>String literals have array type (should be string slices).</li>
+<li>No array/vector range checks in debug builds.</li>
+<li>Standard library severely lacking:
+<ul>
+<li>No standard file system API (added in C++17).</li>
+<li>No Unicode-aware string type.</li>
+<li>No string slice type (added in C++17).</li>
+<li>No array slice type.</li>
+<li>Some very common functionality missing, like a string split function.</li>
+<li>All standard library algorithms take pairs of iterators rather than ranges.</li>
+</ul></li>
+<li>And many more minor design flaws kept for backwards compatibility.</li>
+</ul>
+<p>It is clear that we can't keep adding more and more features to C++ and writing new code in it forever. Sooner or later it will be replaced by another language or languages (at least for writing new code).</p>
+<p>Delta is designed to solve all of the above problems. Let's take a look at another popular systems programming language, Rust, which also solves (almost) all of the above problems (excluding e.g. the lack of named parameters). Rust differs from Delta in the following aspects:</p>
+<ul>
+<li>Guaranteed memory safety is useful for certain types of projects, but for non-safety-critical projects it comes at a cost in productivity (e.g. fighting the borrow checker) and language complexity (e.g. lifetime annotations). Also for preventing bugs caused by memory unsafety, there are great tools like AddressSanitizer which help enormously (and could be built in to the language itself).</li>
+<li>Syntax deviates too much from C++ for little or no benefit.</li>
+<li>Module system could be better (e.g. to not have to explicitly declare a project's module structure in the source code instead of the compiler automatically determining it from the project's directory structure).</li>
+<li>The language is verbose in some cases. (e.g. <code>let mut</code> instead of <code>var</code>, etc.).</li>
+<li>Too few implicit conversions (e.g. cannot assign value of type <code>T</code> directly to a variable of type <code>Option&lt;T&gt;</code>, instead must wrap it in <code>Some(...)</code>).</li>
+<li>Naming convention for standard library and language keywords favors cryptic abbreviated names, instead of clear unabbreviated ones.</li>
+<li>The Rust compiler complains if you use non-snake-case names for variables or functions, or non-camel-case names for types. Delta, like C++, should not force programmers to use a specific style.</li>
+<li>Forces the programmer to write very explicit code (e.g. <a href="https://www.reddit.com/r/rust/comments/3kmrl8/new_to_rust_the_language_seems_really_verbose_is/?ref=share&amp;ref_source=link">console I/O</a>).</li>
+<li>Numeric literals don't work well in generic code (<a href="https://www.reddit.com/r/rust/comments/2zu3eo/what_is_rust_bad_at/cpmgbrx/">example</a>).</li>
+</ul>
+<p>So in summary, Delta is intended to be used over Rust for non-safety-critical applications where programmer productivity, ergonomics, and performance are more important than Rust's safety and explicitness.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://www.reddit.com/r/cpp/comments/7lvteh/what_are_the_weakest_points_of_c_in_your_opinion/?st=JBM8MFRN&amp;sh=30098ea8">&quot;What are the weakest points of C++ in your opinion?&quot; on Reddit</a></li>
+<li><a href="https://www.reddit.com/r/cpp/comments/7639sf/what_would_you_change_in_c_if_backwards/?ref=share&amp;ref_source=link">&quot;What would you change in C++ if backwards compatibility was not an issue?&quot; on Reddit</a></li>
+<li><a href="https://eev.ee/blog/2016/12/01/lets-stop-copying-c/">&quot;Let's stop copying C&quot; by Eevee</a></li>
+<li><a href="https://www.reddit.com/r/cpp/comments/4py6sl/hypothetically_which_standard_library_warts_would/?ref=share&amp;ref_source=link">&quot;Hypothetically, which standard library warts would you like to see fixed in a &quot;std2&quot;?&quot; on Reddit</a></li>
+<li><a href="https://www.reddit.com/r/cpp/comments/2e52t4/if_you_had_the_power_to_completely_overhaul_c/?ref=share&amp;ref_source=link">&quot;If you had the power to completely overhaul C++, what would you change?&quot; on Reddit</a></li>
+<li><a href="https://hackernoon.com/considerations-for-programming-language-design-a-rebuttal-5fb7ef2fd4ba">&quot;Considerations for programming language design: a rebuttal&quot;</a></li>
+</ul>
+</body>
+</html>

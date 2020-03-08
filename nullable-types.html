@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Delta</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="delta.css">
+<script src="lib/codemirror.js"></script>
+<link rel="stylesheet" href="index.css">
+<script src="delta.js"></script>
+<script src="editor.js"></script>
+
+<div class="top-nav">
+    <h1><a href="./index.html">Delta</a></h1>
+    <div class="links">
+        <a href="./introduction.html">Documentation</a>
+        <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
+        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+    </div>
+</div>
+<div class="side-nav">
+    <ul>
+        <li><a href="./introduction.html">Introduction</a></li>
+        <li><a href="./hello-world.html">Hello world!</a></li>
+        <li><a href="./variables-and-constants.html">Variables and constants</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./control-flow.html">Control flow</a></li>
+        <li><a href="./builtin-types.html">Builtin types</a></li>
+        <li><a href="./structs.html">Structs</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./strings.html">Strings</a></li>
+        <li><a href="./pointers.html">Pointers</a></li>
+        <li><a href="./nullable-types.html">Nullable types</a></li>
+        <li><a href="./enum-types.html">Enum types</a></li>
+        <li><a href="./iterators.html">Iterators</a></li>
+        <li><a href="./interfaces.html">Interfaces</a></li>
+        <li><a href="./generics.html">Generics</a></li>
+        <li><a href="./low-level-programming.html">Low-level programming</a></li>
+        <li><a href="./std.html">Standard library reference</a></li>
+        <!-- <li><a href="./design.html">Design document</a></li> -->
+        <!-- <li><a href="./spec.html">Specification</a></li> -->
+    </ul>
+</div>
+
+<script>
+    var currentPage = window.location.pathname.split("/").pop();
+    var link = document.querySelector(".side-nav a[href='./" + currentPage + "']");
+    link.className = "active";
+</script>
+<h1 id="nullable-types">Nullable types</h1>
+<p>Nullable types, also known as optional types, are used represent values that may or may not exist. Values of nullable type allow <code>null</code> to be assigned to them. To specify that a type is nullable, you append <code>?</code> to it.</p>
+<p>The compiler enforces null-safety by default, i.e. checks that we don't forget to handle the case when the value is null. This means you need to check nullable values for null before accessing them.</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">void</span> <span class="fu">main</span>() {
+    <span class="dt">int</span>? foo = <span class="dv">42</span>;
+    <span class="fu">println</span>(foo); <span class="co">// prints 42</span>
+
+    foo = <span class="kw">null</span>;
+    <span class="fu">println</span>(foo); <span class="co">// prints null</span>
+
+    <span class="kw">if</span> (foo) {
+        <span class="fu">println</span>(<span class="st">&quot;foo is non null&quot;</span>); <span class="co">// this is not executed because foo is null</span>
+    }
+
+    <span class="co">// doesn&#39;t compile: using foo as an int without checking it for null</span>
+    <span class="co">// int bar = foo + 1;</span>
+
+    <span class="kw">if</span> (foo) {
+        <span class="co">// fine</span>
+        <span class="dt">int</span> bar = foo + <span class="dv">1</span>;
+    }
+}</code></pre></div>
+<h2 id="non-null-assertion-operator">Non-null assertion operator</h2>
+<p>In some cases, we know that a value of nullable type is non-null, but the compiler cannot verify it. We can tell the compiler that the value is non-null by suffixing it with an <code>!</code>. This is called the non-null assertion operator. If we use it on a value that's actually null, an assertion error will be triggered.</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">void</span> <span class="fu">main</span>() {
+    <span class="dt">int</span>? result = <span class="fu">foo</span>(<span class="kw">true</span>);
+
+    <span class="co">// println(result + 1); // doesn&#39;t work, compiler says result may be null</span>
+    <span class="fu">println</span>(result! + <span class="dv">1</span>); <span class="co">// fine, but only if result is indeed non-null</span>
+}
+
+<span class="dt">int</span>? <span class="fu">foo</span>(<span class="dt">bool</span> b) {
+    <span class="kw">if</span> (b) {
+        <span class="kw">return</span> <span class="dv">42</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+}</code></pre></div>
+</body>
+</html>

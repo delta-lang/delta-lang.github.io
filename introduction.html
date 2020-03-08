@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Delta</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="delta.css">
+<script src="lib/codemirror.js"></script>
+<link rel="stylesheet" href="index.css">
+<script src="delta.js"></script>
+<script src="editor.js"></script>
+
+<div class="top-nav">
+    <h1><a href="./index.html">Delta</a></h1>
+    <div class="links">
+        <a href="./introduction.html">Documentation</a>
+        <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
+        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+    </div>
+</div>
+<div class="side-nav">
+    <ul>
+        <li><a href="./introduction.html">Introduction</a></li>
+        <li><a href="./hello-world.html">Hello world!</a></li>
+        <li><a href="./variables-and-constants.html">Variables and constants</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./control-flow.html">Control flow</a></li>
+        <li><a href="./builtin-types.html">Builtin types</a></li>
+        <li><a href="./structs.html">Structs</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./strings.html">Strings</a></li>
+        <li><a href="./pointers.html">Pointers</a></li>
+        <li><a href="./nullable-types.html">Nullable types</a></li>
+        <li><a href="./enum-types.html">Enum types</a></li>
+        <li><a href="./iterators.html">Iterators</a></li>
+        <li><a href="./interfaces.html">Interfaces</a></li>
+        <li><a href="./generics.html">Generics</a></li>
+        <li><a href="./low-level-programming.html">Low-level programming</a></li>
+        <li><a href="./std.html">Standard library reference</a></li>
+        <!-- <li><a href="./design.html">Design document</a></li> -->
+        <!-- <li><a href="./spec.html">Specification</a></li> -->
+    </ul>
+</div>
+
+<script>
+    var currentPage = window.location.pathname.split("/").pop();
+    var link = document.querySelector(".side-nav a[href='./" + currentPage + "']");
+    link.className = "active";
+</script>
+<h1 id="introduction">Introduction</h1>
+<p><strong>Note:</strong> This page is incomplete and parts of it may be out of date.</p>
+<p>Delta is a modern system programming language designed as an alternative to C++, C, and Rust. The primary goals of Delta are programmer productivity and performance. Memory safety is also a priority, but while Delta improves on what C++ and C have to offer, it doesn't go as far as Rust at the detriment of ergonomics and productivity.</p>
+<h2 id="better-compilation-model">Better compilation model</h2>
+<ul>
+<li>No header files, no forward declarations. API definitions can be generated from the source code if needed.</li>
+<li>Programs are compiled as a whole, instead of compiling each file separately and then linking them together. This should make compiling faster as it leaves more room for optimizing the build process, and linking is usually quite slow.</li>
+<li>Libraries are imported as a whole, instead of importing individual files from them, freeing the user of the library from having to figure out which file to import for a specific feature, and freeing the library author from keeping the library's file structure the same for backwards compatibility.</li>
+<li>Every library is automatically wrapped inside their own namespace, no need to explicitly declare the namespace in each source file.</li>
+</ul>
+<p>All of the above should result in faster compilation times and increased programmer productivity compared to C and C++.</p>
+<h2 id="standard-build-system">Standard build system</h2>
+<p>Building a Delta project is done with a single command: <code>delta build</code>, which works out of the box without a single line of build configuration code. It finds all Delta source files in the project directory (recursively) and compiles them into an executable. Additional build information, such as dependencies, can be declared in a package configuration file. <code>delta build</code> will then download or find these dependencies, and link them into the resulting executable.</p>
+<p>No need to learn a new build system for each project, or manage project-specific build scripts, which is often the case with C and C++ projects.</p>
+<p>Long-term goal: include a built-in linting tool that runs during compilation to enforce a specific coding style, or to disallow uses of certain language features.</p>
+<h2 id="standard-package-manager">Standard package manager</h2>
+<p>Using and distributing third-party libraries should be made as easy as possible. For example, there should be no platform-specific dependency or release management. Adding a dependency or publishing a library means running a single command.</p>
+<p>Initially supports fetching dependencies from Git repositories. Other version control systems, binary distributions, system package managers, etc. will be supported later.</p>
+<h2 id="faster-than-c-and-c">Faster than C and C++</h2>
+<p>More optimization opportunities:</p>
+<ul>
+<li>Moves are destructive, removing the need to reset moved-from objects and call their destructors, as is required in C++.</li>
+<li>Pointers can be declared non-aliasing either individually or globally with a compiler flag.</li>
+<li>The language provides a type-safe reallocation function for arrays, instead of just allocation and deallocation functions like C++. For example, the Delta equivalent of C++'s <code>std::vector</code> makes use of this function.</li>
+<li>Unsigned integer overflow is undefined. There are still functions to do wrapping arithmetic on both signed and unsigned integers, when needed.</li>
+<li>Compiler is allowed to reorder struct fields. This can be prevented using an attribute or compiler flag.</li>
+</ul>
+<p>Delta uses the open-source LLVM library as a code generation back-end, benefiting from all current and future optimizations implemented in LLVM.</p>
+<p>No hidden expensive operations, like implicit calls to copy constructors and copy assignment operators in C++.</p>
+<h2 id="improved-syntax">Improved syntax</h2>
+<p>Delta's syntax is clean, consistent, and similar to the C family of languages.</p>
+<p>No C-style cast syntax, only C++-style casts and built-in type constructors.</p>
+<h3 id="examples-of-syntax">Examples of syntax</h3>
+<p>Syntax of a lambda returning the result of a single expression, with argument type inference:</p>
+<pre><code>// C++
+a([](auto&amp; b) { return b.c(); });
+
+// Delta
+a(b -&gt; b.c());</code></pre>
+<p>Function pointer declaration:</p>
+<pre><code>// C/C++
+void (*f)(int);
+
+// Delta
+void(int) f;</code></pre>
+<h2 id="simple-and-expressive-language">Simple and expressive language</h2>
+<ul>
+<li>Only structs instead of having both struct and class.</li>
+<li>Only pointers instead of having both pointers and references. Note that Delta pointers are not identical to C/C++ pointers.</li>
+<li>Member access always uses <code>.</code>, never <code>-&gt;</code>.</li>
+<li>Switch statement cases break automatically, avoids bugs caused by missing <code>break</code> in C and C++. Fallthrough is opt-in. Variables can also be declared inside switch cases without requiring a block.</li>
+<li>Simpler to parse, making it easier to implement syntax highlighting, auto-formatting, linting, etc.</li>
+<li>Single-parameter constructors are not implicit by default.</li>
+<li>Only one initialization syntax instead of <a href="https://en.cppreference.com/w/cpp/language/initialization">three</a>.</li>
+<li>The <code>static</code> keyword is not overloaded with 3 different meanings. Delta uses it only for non-instance members.</li>
+<li>No built-in preprocessor, at least not in the same form as C and C++. Delta only has the conditional compilation directive <code>#ifdef</code> and its friends, which can be configured only from the command-line, not from source code as can be done in C and C++ with <code>#define</code>. Although there is no preprocessor, Delta may get macros in some form if it turns out the language needs them.</li>
+</ul>
+<p>Semantics are more in line with usual programmer expectations:</p>
+<ul>
+<li>Read-only use of <code>operator[]</code> on maps doesn't insert a default-constructed element.</li>
+<li>Inline functions are actually inlined, at least in debug mode.</li>
+<li>The integer types <code>int</code> and <code>uint</code> are at least 32 bits.</li>
+<li>String literals are of type <code>StringRef</code>, so they know their size and have all string manipulation member functions.</li>
+<li>Array parameters aren't silently converted into pointers.</li>
+</ul>
+<h2 id="safer-by-default">Safer by default</h2>
+<p>Delta inserts at least the following safety checks by default:</p>
+<ul>
+<li>Array bounds checks</li>
+<li>Integer overflow checks</li>
+<li>Null checks</li>
+</ul>
+<p>These checks can be disabled individually or globally to make the code run faster.</p>
+<p>The compiler warns if a variable might be read before being initialized, for example when passing it as an out parameter to a C function. If you know the warning is safe to ignore, you can suppress it by assigning the keyword <code>undefined</code> to the variable.</p>
+<p>The compiler warns if a function's return value is ignored, by default. The function can be annotated to suppress this behavior, if the return value is safe to ignore. The call site can also explicitly declare the return value as unused by assigning it to <code>_</code>, instead of casting to void. <code>_</code> is a magic identifier which is also used in other contexts to mean &quot;ignore this value&quot;.</p>
+<h2 id="transparent-interoperation-with-existing-c-apis">Transparent interoperation with existing C APIs</h2>
+<p>C headers can be imported directly from Delta code. The Clang API is used to parse the C headers and allow the contained declarations to be accessed from Delta code. Delta functions can be declared <code>extern &quot;C&quot;</code> to enable calling them from C.</p>
+<p>Support for the same level of interoperability with C++ APIs is a longer-term goal.</p>
+<h2 id="improved-type-system">Improved type system</h2>
+<p>Stronger typing to help avoid bugs and to make refactoring easier:</p>
+<ul>
+<li>No bug-prone implicit conversions between built-in types. Safe implicit conversions are still allowed, but may also be prevented with a compiler flag.</li>
+<li>All types are non-nullable by default. Nullable types are annotated with <code>?</code>.</li>
+</ul>
+<p>Modern type system features for convenience and performance:</p>
+<ul>
+<li>Proper tagged union type to allow runtime polymorphism without dynamic allocation and virtual function calls.
+<ul>
+<li>C <code>union</code>: not type-safe, have to write a lot of wrapper code to call destructors and move/copy constructors/assignment operators.</li>
+<li>C++17 <code>std::variant</code>: not easy or elegant to use (see https://bitbashing.io/std-visit.html).</li>
+</ul></li>
+<li>Using <code>interface</code>s (Delta's equivalent of C++ concepts) allows defining what kind of types are valid for a given template parameter when writing a generic type or function. This leads to much more readable error messages when instantiating generic types or functions with an incompatible type as the generic argument. C++-style unconstrained generic parameters are still allowed for flexibility.</li>
+<li>Arrays are first-class values that can be returned and passed by value. Arrays know their own size, either statically or at runtime.</li>
+<li>First-class tuples to allow e.g. returning multiple values or storing pairs of values in a container using a lightweight syntax.</li>
+</ul>
+<h2 id="standard-library-covers-common-use-cases-better">Standard library covers common use cases better</h2>
+<ul>
+<li>More string manipulation functions, e.g. case-insensitive comparison, <code>split</code>, <code>join</code>, <code>startsWith</code>, <code>endsWith</code>.</li>
+<li>String and array slice types: <code>StringRef</code> and <code>ArrayRef</code>.</li>
+<li>Unicode-correct string type in addition to a raw byte string type.</li>
+<li>Algorithms take range objects instead of iterator pairs for ease of use.</li>
+<li>Iterable types in the standard library provide <code>map</code>, <code>filter</code>, <code>reduce</code>, etc. as member functions.</li>
+<li>File system library.</li>
+<li>Process library.</li>
+<li>Better math support:
+<ul>
+<li>Math functions can be evaluated at compile-time.</li>
+<li>Standard library provides math constants such as Pi.</li>
+</ul></li>
+</ul>
+<h2 id="language-features">Language features</h2>
+<h3 id="destructuring">Destructuring</h3>
+<p>While iterating a map, the key and value from the key-value tuple can be destructured into separate variables:</p>
+<pre><code>for (var (key, value) in myMap) {
+    ...
+}</code></pre>
+<p>Destructure the return value of a function returning multiple values as a tuple:</p>
+<pre><code>(int, bool) foo() {
+    var a = 42;
+    var b = false;
+    return (a, b);
+}
+
+void main() {
+    var (a, b) = foo();
+}</code></pre>
+<h3 id="compile-time-reflection">Compile-time reflection</h3>
+<p>Should cover common use cases such as iteration over enum cases, getting enum case string representations, printing the active type of a union, etc. Should follow the &quot;pay only for what you use&quot; principle.</p>
+<h3 id="named-arguments">Named arguments</h3>
+<p>An optional way to avoid cryptic call sites like <code>foo(true, false)</code> by labeling the arguments with the corresponding parameter name, with the compiler checking that the argument labels match the parameter names, e.g. <code>foo(a: true, b: false)</code>. Consequently, named arguments don't have to be in same order as the parameters. This also enables function overloading on parameter names.</p>
+<h3 id="defer-statement">Defer statement</h3>
+<p>The <code>defer</code> keyword allows declaring arbitrary code, such as resource cleanup functions, to be executed when exiting the current scope. In C++ one has to write an RAII wrapper class to achieve this.</p>
+<h3 id="type-inference">Type inference</h3>
+<p>Type inference for local and global variables, to improve productivity and make the code more amenable to type changes when refactoring. The strong type system still has your back.</p>
+<h2 id="and-all-the-good-parts-from-c-and-c">…and all the good parts from C and C++</h2>
+<ul>
+<li>Performance and control.</li>
+<li>Pay only for what you use.</li>
+<li>No garbage collection.</li>
+<li>Don't force the programmer to use a specific style.</li>
+<li>Have some implicit conversions and other features for convenience.</li>
+<li>Backwards compatibility eventually once the language design has stabilized.</li>
+</ul>
+</body>
+</html>

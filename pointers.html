@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Delta</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="delta.css">
+<script src="lib/codemirror.js"></script>
+<link rel="stylesheet" href="index.css">
+<script src="delta.js"></script>
+<script src="editor.js"></script>
+
+<div class="top-nav">
+    <h1><a href="./index.html">Delta</a></h1>
+    <div class="links">
+        <a href="./introduction.html">Documentation</a>
+        <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
+        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+    </div>
+</div>
+<div class="side-nav">
+    <ul>
+        <li><a href="./introduction.html">Introduction</a></li>
+        <li><a href="./hello-world.html">Hello world!</a></li>
+        <li><a href="./variables-and-constants.html">Variables and constants</a></li>
+        <li><a href="./functions.html">Functions</a></li>
+        <li><a href="./control-flow.html">Control flow</a></li>
+        <li><a href="./builtin-types.html">Builtin types</a></li>
+        <li><a href="./structs.html">Structs</a></li>
+        <li><a href="./list.html">List</a></li>
+        <li><a href="./strings.html">Strings</a></li>
+        <li><a href="./pointers.html">Pointers</a></li>
+        <li><a href="./nullable-types.html">Nullable types</a></li>
+        <li><a href="./enum-types.html">Enum types</a></li>
+        <li><a href="./iterators.html">Iterators</a></li>
+        <li><a href="./interfaces.html">Interfaces</a></li>
+        <li><a href="./generics.html">Generics</a></li>
+        <li><a href="./low-level-programming.html">Low-level programming</a></li>
+        <li><a href="./std.html">Standard library reference</a></li>
+        <!-- <li><a href="./design.html">Design document</a></li> -->
+        <!-- <li><a href="./spec.html">Specification</a></li> -->
+    </ul>
+</div>
+
+<script>
+    var currentPage = window.location.pathname.split("/").pop();
+    var link = document.querySelector(".side-nav a[href='./" + currentPage + "']");
+    link.className = "active";
+</script>
+<h1 id="pointers">Pointers</h1>
+<p>Pointers in Delta, written <code>T*</code>, are almost like in C and C++, except that they can't be null by default. To create nullable pointers, the pointer type has to be marked as <a href="nullable-types.html">nullable</a>.</p>
+<p>To form a pointer, the <code>&amp;</code> operator can be used. To dereference a pointer, the <code>*</code> operator can be used.</p>
+<p>Comparing pointers always compares to pointed-to objects. To compare the memory addresses, the reference equality operators <code>===</code> and <code>!==</code> can be used.</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">void</span> <span class="fu">main</span>() {
+    <span class="dt">int</span> i = <span class="dv">6</span>;
+    <span class="dt">int</span>* p = &amp;i; <span class="co">// Make p point to i</span>
+    <span class="fu">println</span>(p); <span class="co">// Prints 6</span>
+
+    <span class="dt">int</span>* q = p; <span class="co">// Copy p to q, both point to i now</span>
+    <span class="fu">println</span>(p === q); <span class="co">// Prints true because both pointers point to the same memory address</span>
+
+    <span class="dt">int</span> j = <span class="dv">6</span>;
+    p = &amp;j; <span class="co">// Change p to point to j</span>
+    <span class="fu">println</span>(p === q); <span class="co">// Prints false because pointers point to different memory addresses</span>
+
+    *p = <span class="dv">7</span>; <span class="co">// Change the value of j</span>
+    <span class="fu">println</span>(p * q); <span class="co">// Multiplies the values pointed to by p and q, prints 42</span>
+}</code></pre></div>
+<h2 id="array-pointers">Array pointers</h2>
+<p>Array pointers, written <code>T[*]</code>, are pointers that point to an array of unknown length, or one step past the end of an array. They support pointer arithmetic.</p>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="dt">void</span> <span class="fu">main</span>() {
+    <span class="dt">int</span>[<span class="dv">3</span>] a = [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>];
+
+    <span class="dt">int</span>[*] p = a; <span class="co">// p points to a</span>
+    <span class="fu">println</span>(p[<span class="dv">0</span>]); <span class="co">// prints 1</span>
+
+    p++; <span class="co">// increment pointer to next element</span>
+    <span class="fu">println</span>(p[<span class="dv">0</span>]); <span class="co">// prints 2</span>
+
+    p = &amp;p[<span class="dv">1</span>]; <span class="co">// increment pointer to next element</span>
+    <span class="fu">println</span>(*p); <span class="co">// *p is equivalent to p[0], prints 3</span>
+}</code></pre></div>
+</body>
+</html>

@@ -1,1 +1,169 @@
-<meta http-equiv="refresh" content="0; URL=./sandbox.html">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Delta</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="delta.css">
+<script src="lib/codemirror.js"></script>
+<link rel="stylesheet" href="index.css">
+<script src="delta.js"></script>
+<script src="editor.js"></script>
+
+<div class="top-nav">
+    <h1><a href="./index.html">Delta</a></h1>
+    <div class="links">
+        <a href="./introduction.html">Documentation</a>
+        <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
+        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+    </div>
+</div>
+<div class="intro">
+<p>Delta is a programming language with the goal of making you more productive at writing efficient software. It supports both low-level and high-level programming, as well as multiple paradigms.</p>
+</div>
+<div class="features">
+<div class="block">
+<h4 id="performance-first-approach-to-common-programming-patterns">Performance-first approach to common programming patterns</h4>
+<ul>
+<li>Non-allocating subtype polymorphism and dynamic dispatch using tagged unions</li>
+<li>Non-allocating map(), filter(), etc. using lazy iterators</li>
+<li>Non-allocating string and array operations using slices</li>
+</ul>
+</div>
+<div class="block">
+<h4 id="full-control-over-what-your-code-is-doing">Full control over what your code is doing</h4>
+<ul>
+<li>No hidden allocations, no implicit deep copies, no runtime</li>
+<li>Support for ownership-based, reference-counted, and manual memory management</li>
+<li>Reference-like pointers, and array pointers supporting pointer arithmetic</li>
+</ul>
+</div>
+<div class="block">
+<h4 id="speed-up-the-edit-compile-run-cycle">Speed up the edit-compile-run cycle</h4>
+<ul>
+<li>Clean syntax without unnecessary boilerplate</li>
+<li>No compilation bottlenecks like header files or heavy meta-programming</li>
+<li>Helpful diagnostics, prefer warnings over errors that get in the way of refactoring</li>
+</ul>
+</div>
+<div class="block">
+<h4 id="run-fast">Run fast</h4>
+<ul>
+<li>Efficient native machine code optimized using LLVM</li>
+<li>More optimization opportunities: destructive moves, undefined integer overflow, etc.</li>
+<li>Follows the &quot;pay only for what you use&quot; principle</li>
+</ul>
+</div>
+<div class="block">
+<h4 id="fail-fast">Fail fast</h4>
+<ul>
+<li>Strongly typed, implicit conversions disallowed by default</li>
+<li>Compile-time null-safety using nullable types</li>
+<li>Optional arithmetic overflow checks and array bounds checks</li>
+</ul>
+</div>
+<div class="block">
+<h4 id="use-existing-skills-workflows-and-libraries">Use existing skills, workflows, and libraries</h4>
+<ul>
+<li>Minimal learning curve for C and C++ programmers</li>
+<li>Doesn't force a specific style or paradigm, lets you choose what suits your project best</li>
+<li>Ability to import C headers and use C libraries directly</li>
+</ul>
+</div>
+<div class="block">
+<h4 id="trade-offs">Trade-offs</h4>
+<ul>
+<li>Memory safety is the programmer's responsibility</li>
+</ul>
+</div>
+<div class="block">
+<h4 id="planned-features">Planned features</h4>
+<ul>
+<li>Builtin dependency management and build system</li>
+<li>Fast compilation</li>
+<li>Static reflection</li>
+<li>Error handling</li>
+<li>Builtin vector types</li>
+<li>Optional compiler-enforced memory-safe subset</li>
+<li>Optional runtime checks to alleviate lack of memory safety</li>
+</ul>
+</div>
+</div>
+<h4 id="example-code">Example code</h4>
+<div class="sourceCode"><pre class="sourceCode cs"><code class="sourceCode cs"><span class="co">// Mandelbrot set visualizer</span>
+
+<span class="kw">struct</span> Complex: Copyable {
+    <span class="dt">float</span> r;
+    <span class="dt">float</span> i;
+
+    <span class="dt">float</span> <span class="fu">abs</span>() {
+        <span class="kw">return</span> r * r + i * i;
+    }
+}
+
+Complex <span class="kw">operator</span>+(Complex* a, Complex* b) {
+    <span class="kw">return</span> <span class="fu">Complex</span>(a.<span class="fu">r</span> + b.<span class="fu">r</span>, a.<span class="fu">i</span> + b.<span class="fu">i</span>);
+}
+
+Complex <span class="kw">operator</span>*(Complex* a, Complex* b) {
+    <span class="kw">return</span> <span class="fu">Complex</span>(a.<span class="fu">r</span> * b.<span class="fu">r</span> - a.<span class="fu">i</span> * b.<span class="fu">i</span>, a.<span class="fu">r</span> * b.<span class="fu">i</span> + a.<span class="fu">i</span> * b.<span class="fu">r</span>);
+}
+
+<span class="dt">void</span> <span class="fu">main</span>() {
+    <span class="kw">for</span> (var y = -<span class="fl">0.9</span>; y &lt; <span class="fl">0.9</span>; y += <span class="fl">0.09</span>) {
+        <span class="kw">for</span> (var x = -<span class="fl">1.4</span>; x &lt; <span class="fl">0.4</span>; x += <span class="fl">0.045</span>) {
+            <span class="dt">var</span> z = <span class="fu">Complex</span>(<span class="dv">0</span>, <span class="dv">0</span>);
+            <span class="kw">for</span> (var _ <span class="kw">in</span> <span class="dv">0</span>...<span class="fu">100</span>) {
+                z = z * z + <span class="fu">Complex</span>(x, y);
+            }
+            var chars = <span class="st">&quot; .:-;!/&gt;)|&amp;IH%*#&quot;</span>;
+            <span class="dt">var</span> index = <span class="fu">clamp</span>(<span class="dt">int</span>(z.<span class="fu">abs</span>() * <span class="dv">50</span>), <span class="dv">0</span>, chars.<span class="fu">size</span>() - <span class="dv">1</span>);
+            <span class="fu">print</span>(chars[index]);
+        }
+        <span class="fu">print</span>(<span class="ch">&#39;\n&#39;</span>);
+    }
+}</code></pre></div>
+</body>
+</html>

@@ -1,11 +1,152 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Delta</title>
-  <style type="text/css">code{white-space: pre;}</style>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
 <link rel="stylesheet" href="lib/codemirror.css">
@@ -54,12 +195,12 @@
 </script>
 <h1 id="introduction">Introduction</h1>
 <p><strong>Note:</strong> This page is incomplete and parts of it may be out of date.</p>
-<p>Delta is a modern system programming language designed as an alternative to C++, C, and Rust. The primary goals of Delta are programmer productivity and performance. Memory safety is also a priority, but while Delta improves on what C++ and C have to offer, it doesn't go as far as Rust at the detriment of ergonomics and productivity.</p>
+<p>Delta is a modern system programming language designed as an alternative to C++, C, and Rust. The primary goals of Delta are programmer productivity and performance. Memory safety is also a priority, but while Delta improves on what C++ and C have to offer, it doesn’t go as far as Rust at the detriment of ergonomics and productivity.</p>
 <h2 id="better-compilation-model">Better compilation model</h2>
 <ul>
 <li>No header files, no forward declarations. API definitions can be generated from the source code if needed.</li>
 <li>Programs are compiled as a whole, instead of compiling each file separately and then linking them together. This should make compiling faster as it leaves more room for optimizing the build process, and linking is usually quite slow.</li>
-<li>Libraries are imported as a whole, instead of importing individual files from them, freeing the user of the library from having to figure out which file to import for a specific feature, and freeing the library author from keeping the library's file structure the same for backwards compatibility.</li>
+<li>Libraries are imported as a whole, instead of importing individual files from them, freeing the user of the library from having to figure out which file to import for a specific feature, and freeing the library author from keeping the library’s file structure the same for backwards compatibility.</li>
 <li>Every library is automatically wrapped inside their own namespace, no need to explicitly declare the namespace in each source file.</li>
 </ul>
 <p>All of the above should result in faster compilation times and increased programmer productivity compared to C and C++.</p>
@@ -75,14 +216,14 @@
 <ul>
 <li>Moves are destructive, removing the need to reset moved-from objects and call their destructors, as is required in C++.</li>
 <li>Pointers can be declared non-aliasing either individually or globally with a compiler flag.</li>
-<li>The language provides a type-safe reallocation function for arrays, instead of just allocation and deallocation functions like C++. For example, the Delta equivalent of C++'s <code>std::vector</code> makes use of this function.</li>
+<li>The language provides a type-safe reallocation function for arrays, instead of just allocation and deallocation functions like C++. For example, the Delta equivalent of C++’s <code>std::vector</code> makes use of this function.</li>
 <li>Unsigned integer overflow is undefined. There are still functions to do wrapping arithmetic on both signed and unsigned integers, when needed.</li>
 <li>Compiler is allowed to reorder struct fields. This can be prevented using an attribute or compiler flag.</li>
 </ul>
 <p>Delta uses the open-source LLVM library as a code generation back-end, benefiting from all current and future optimizations implemented in LLVM.</p>
 <p>No hidden expensive operations, like implicit calls to copy constructors and copy assignment operators in C++.</p>
 <h2 id="improved-syntax">Improved syntax</h2>
-<p>Delta's syntax is clean, consistent, and similar to the C family of languages.</p>
+<p>Delta’s syntax is clean, consistent, and similar to the C family of languages.</p>
 <p>No C-style cast syntax, only C++-style casts and built-in type constructors.</p>
 <h3 id="examples-of-syntax">Examples of syntax</h3>
 <p>Syntax of a lambda returning the result of a single expression, with argument type inference:</p>
@@ -111,11 +252,11 @@ void(int) f;</code></pre>
 </ul>
 <p>Semantics are more in line with usual programmer expectations:</p>
 <ul>
-<li>Read-only use of <code>operator[]</code> on maps doesn't insert a default-constructed element.</li>
+<li>Read-only use of <code>operator[]</code> on maps doesn’t insert a default-constructed element.</li>
 <li>Inline functions are actually inlined, at least in debug mode.</li>
 <li>The integer types <code>int</code> and <code>uint</code> are at least 32 bits.</li>
 <li>String literals are of type <code>StringRef</code>, so they know their size and have all string manipulation member functions.</li>
-<li>Array parameters aren't silently converted into pointers.</li>
+<li>Array parameters aren’t silently converted into pointers.</li>
 </ul>
 <h2 id="safer-by-default">Safer by default</h2>
 <p>Delta inserts at least the following safety checks by default:</p>
@@ -126,9 +267,9 @@ void(int) f;</code></pre>
 </ul>
 <p>These checks can be disabled individually or globally to make the code run faster.</p>
 <p>The compiler warns if a variable might be read before being initialized, for example when passing it as an out parameter to a C function. If you know the warning is safe to ignore, you can suppress it by assigning the keyword <code>undefined</code> to the variable.</p>
-<p>The compiler warns if a function's return value is ignored, by default. The function can be annotated to suppress this behavior, if the return value is safe to ignore. The call site can also explicitly declare the return value as unused by assigning it to <code>_</code>, instead of casting to void. <code>_</code> is a magic identifier which is also used in other contexts to mean &quot;ignore this value&quot;.</p>
+<p>The compiler warns if a function’s return value is ignored, by default. The function can be annotated to suppress this behavior, if the return value is safe to ignore. The call site can also explicitly declare the return value as unused by assigning it to <code>_</code>, instead of casting to void. <code>_</code> is a magic identifier which is also used in other contexts to mean “ignore this value”.</p>
 <h2 id="transparent-interoperation-with-existing-c-apis">Transparent interoperation with existing C APIs</h2>
-<p>C headers can be imported directly from Delta code. The Clang API is used to parse the C headers and allow the contained declarations to be accessed from Delta code. Delta functions can be declared <code>extern &quot;C&quot;</code> to enable calling them from C.</p>
+<p>C headers can be imported directly from Delta code. The Clang API is used to parse the C headers and allow the contained declarations to be accessed from Delta code. Delta functions can be declared <code>extern "C"</code> to enable calling them from C.</p>
 <p>Support for the same level of interoperability with C++ APIs is a longer-term goal.</p>
 <h2 id="improved-type-system">Improved type system</h2>
 <p>Stronger typing to help avoid bugs and to make refactoring easier:</p>
@@ -143,13 +284,13 @@ void(int) f;</code></pre>
 <li>C <code>union</code>: not type-safe, have to write a lot of wrapper code to call destructors and move/copy constructors/assignment operators.</li>
 <li>C++17 <code>std::variant</code>: not easy or elegant to use (see https://bitbashing.io/std-visit.html).</li>
 </ul></li>
-<li>Using <code>interface</code>s (Delta's equivalent of C++ concepts) allows defining what kind of types are valid for a given template parameter when writing a generic type or function. This leads to much more readable error messages when instantiating generic types or functions with an incompatible type as the generic argument. C++-style unconstrained generic parameters are still allowed for flexibility.</li>
+<li>Using <code>interface</code>s (Delta’s equivalent of C++ concepts) allows defining what kind of types are valid for a given template parameter when writing a generic type or function. This leads to much more readable error messages when instantiating generic types or functions with an incompatible type as the generic argument. C++-style unconstrained generic parameters are still allowed for flexibility.</li>
 <li>Arrays are first-class values that can be returned and passed by value. Arrays know their own size, either statically or at runtime.</li>
-<li>First-class tuples to allow e.g. returning multiple values or storing pairs of values in a container using a lightweight syntax.</li>
+<li>First-class tuples to allow e.g. returning multiple values or storing pairs of values in a container using a lightweight syntax.</li>
 </ul>
 <h2 id="standard-library-covers-common-use-cases-better">Standard library covers common use cases better</h2>
 <ul>
-<li>More string manipulation functions, e.g. case-insensitive comparison, <code>split</code>, <code>join</code>, <code>startsWith</code>, <code>endsWith</code>.</li>
+<li>More string manipulation functions, e.g. case-insensitive comparison, <code>split</code>, <code>join</code>, <code>startsWith</code>, <code>endsWith</code>.</li>
 <li>String and array slice types: <code>StringRef</code> and <code>ArrayRef</code>.</li>
 <li>Unicode-correct string type in addition to a raw byte string type.</li>
 <li>Algorithms take range objects instead of iterator pairs for ease of use.</li>
@@ -179,9 +320,9 @@ void main() {
     var (a, b) = foo();
 }</code></pre>
 <h3 id="compile-time-reflection">Compile-time reflection</h3>
-<p>Should cover common use cases such as iteration over enum cases, getting enum case string representations, printing the active type of a union, etc. Should follow the &quot;pay only for what you use&quot; principle.</p>
+<p>Should cover common use cases such as iteration over enum cases, getting enum case string representations, printing the active type of a union, etc. Should follow the “pay only for what you use” principle.</p>
 <h3 id="named-arguments">Named arguments</h3>
-<p>An optional way to avoid cryptic call sites like <code>foo(true, false)</code> by labeling the arguments with the corresponding parameter name, with the compiler checking that the argument labels match the parameter names, e.g. <code>foo(a: true, b: false)</code>. Consequently, named arguments don't have to be in same order as the parameters. This also enables function overloading on parameter names.</p>
+<p>An optional way to avoid cryptic call sites like <code>foo(true, false)</code> by labeling the arguments with the corresponding parameter name, with the compiler checking that the argument labels match the parameter names, e.g. <code>foo(a: true, b: false)</code>. Consequently, named arguments don’t have to be in same order as the parameters. This also enables function overloading on parameter names.</p>
 <h3 id="defer-statement">Defer statement</h3>
 <p>The <code>defer</code> keyword allows declaring arbitrary code, such as resource cleanup functions, to be executed when exiting the current scope. In C++ one has to write an RAII wrapper class to achieve this.</p>
 <h3 id="type-inference">Type inference</h3>
@@ -191,7 +332,7 @@ void main() {
 <li>Performance and control.</li>
 <li>Pay only for what you use.</li>
 <li>No garbage collection.</li>
-<li>Don't force the programmer to use a specific style.</li>
+<li>Don’t force the programmer to use a specific style.</li>
 <li>Have some implicit conversions and other features for convenience.</li>
 <li>Backwards compatibility eventually once the language design has stabilized.</li>
 </ul>

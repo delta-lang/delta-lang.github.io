@@ -40,8 +40,6 @@ app.post("/run", cors(corsOptions), function(req, res) {
         var args = [
             "run",
             "main.delta",
-            "-B/app/.apt/usr/lib/x86_64-linux-gnu",
-            "-static",
             ...importSearchPathFlags
         ];
 

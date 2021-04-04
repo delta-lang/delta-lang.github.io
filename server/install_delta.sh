@@ -9,21 +9,21 @@ fi
 cd delta
 git checkout $DELTA_VERSION
 
-# Parse LLVM version from Travis config.
-LLVM_LONG_VERSION=$(grep -oP 'LLVM_VERSION=(\K.*)' .travis.yml)
+LLVM_VERSION=$(grep -oP 'LLVM_VERSION: (\K.*)' .github/workflows/build.yml)
+LLVM_TARBALL=clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-20.04
 
 curl -L "https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0-Linux-x86_64.tar.gz" | tar xz
-curl -L "http://releases.llvm.org/$LLVM_LONG_VERSION/clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04.tar.xz" | tar xJ
+curl -L "https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/$LLVM_TARBALL.tar.xz" | tar xJ
 
 cmake-3.15.0-Linux-x86_64/bin/cmake . \
     -G 'Unix Makefiles' \
     -DCMAKE_BUILD_TYPE=Debug \
-    -DCMAKE_PREFIX_PATH=$PWD/clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04
+    -DCMAKE_PREFIX_PATH=$PWD/$LLVM_TARBALL
 make -j
 
 # Reduce size for Heroku slug compression.
 rm -rf cmake-3.15.0-Linux-x86_64
-mkdir -p ../lib/clang/$LLVM_LONG_VERSION
-mv clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04/lib/clang/$LLVM_LONG_VERSION/include ../lib/clang/$LLVM_LONG_VERSION
-rm -rf clang+llvm-$LLVM_LONG_VERSION-x86_64-linux-gnu-ubuntu-18.04
+mkdir -p ../lib/clang/$LLVM_VERSION
+mv $LLVM_TARBALL/lib/clang/$LLVM_VERSION/include ../lib/clang/$LLVM_VERSION
+rm -rf $LLVM_TARBALL
 rm -f src/**/*.a

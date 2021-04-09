@@ -9,14 +9,14 @@ var app = express();
 app.use(bodyParser.json());
 
 var isProduction = process.env.NODE_ENV === "production";
-var importSearchPathFlags = isProduction ? [`-I${process.cwd()}/delta`] : [];
-var deltaPath = process.argv[2] || process.cwd() + "/delta/delta";
+var importSearchPathFlags = isProduction ? [`-I${process.cwd()}/cx`] : [];
+var cxPath = process.argv[2] || process.cwd() + "/cx/cx";
 
-if (child_process.spawnSync(deltaPath, ["-help"]).error) {
-    console.error(`Invalid path '${deltaPath}'`);
+if (child_process.spawnSync(cxPath, ["-help"]).error) {
+    console.error(`Invalid path '${cxPath}'`);
     process.exit(1);
 } else {
-    console.log(`Using '${deltaPath}'`);
+    console.log(`Using '${cxPath}'`);
 }
 
 var corsOptions = {
@@ -29,7 +29,7 @@ app.options("/run", cors(corsOptions)); // enable pre-flight request for "/run"
 app.post("/run", cors(corsOptions), function(req, res) {
     var dir = os.tmpdir();
 
-    fs.writeFile(dir + "/main.delta", req.body.code, function(error) {
+    fs.writeFile(dir + "/main.cx", req.body.code, function(error) {
         if (error) {
             console.error(error.stack);
             return res.send(JSON.stringify({ stderr: error.stack }));
@@ -39,11 +39,11 @@ app.post("/run", cors(corsOptions), function(req, res) {
 
         var args = [
             "run",
-            "main.delta",
+            "main.cx",
             ...importSearchPathFlags
         ];
 
-        child_process.execFile(deltaPath, args, { timeout: 5000 }, function(error, stdout, stderr) {
+        child_process.execFile(cxPath, args, { timeout: 5000 }, function(error, stdout, stderr) {
             if (error) {
                 console.error(error.stack);
 

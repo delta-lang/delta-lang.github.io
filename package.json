@@ -1,12 +1,12 @@
 {
-  "name": "delta-sandbox",
+  "name": "cx-online-compiler",
   "version": "1.0.0",
   "description": "",
-  "repository": "https://github.com/delta-lang/delta-lang.github.io",
+  "repository": "https://github.com/cx-language/cx-language.github.io",
   "scripts": {
     "format": "prettier --write ./**/*.js ./**/*.css",
     "start": "node server/server.js",
-    "preinstall": "[ \"$NODE_ENV\" != production ] && exit 0; server/install_delta.sh",
+    "preinstall": "[ \"$NODE_ENV\" != production ] && exit 0; server/install-cx.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "emlai",

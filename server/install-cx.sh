@@ -1,13 +1,13 @@
 set -e
 
-DELTA_VERSION=$(cat "$(dirname $0)/.delta-version")
+CX_VERSION=$(cat "$(dirname $0)/.cx-version")
 
-if [ ! -d delta ]; then
-    git clone --recursive https://github.com/delta-lang/delta.git
+if [ ! -d cx ]; then
+    git clone --recursive https://github.com/cx-language/cx.git
 fi
 
-cd delta
-git checkout $DELTA_VERSION
+cd cx
+git checkout $CX_VERSION
 
 LLVM_VERSION=$(grep -oP 'LLVM_VERSION: (\K.*)' .github/workflows/build.yml)
 LLVM_TARBALL=clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-20.04

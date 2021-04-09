@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Delta</title>
+  <title>C*</title>
   <style>
     html {
       line-height: 1.5;
@@ -213,18 +213,18 @@
 </head>
 <body>
 <link rel="stylesheet" href="lib/codemirror.css">
-<link rel="stylesheet" href="delta.css">
+<link rel="stylesheet" href="cx.css">
 <script src="lib/codemirror.js"></script>
 <link rel="stylesheet" href="index.css">
-<script src="delta.js"></script>
+<script src="cx.js"></script>
 <script src="editor.js"></script>
 
 <div class="top-nav">
-    <h1><a href="./index.html">Delta</a></h1>
+    <h1><a href="./index.html">C*</a></h1>
     <div class="links">
         <a href="./introduction.html">Documentation</a>
         <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
-        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+        <a href="https://github.com/cx-language/cx" target="_blank">GitHub</a>
     </div>
 </div>
 <div class="side-nav">
@@ -257,7 +257,7 @@
     link.className = "active";
 </script>
 <h1 id="variables-and-constants">Variables and constants</h1>
-<p>Delta has variables, declared using <code>var</code> or an explicit type, and constants, declared using <code>const</code> (possibly followed by an explicit type).</p>
+<p>C* has variables, declared using <code>var</code> or an explicit type, and constants, declared using <code>const</code> (possibly followed by an explicit type).</p>
 <p>When using <code>var</code> or <code>const</code> without an explicit type, the type of the variable or constant will be inferred from the initializer.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="fu">main</span><span class="op">()</span> <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// type is explicitly specified as &#39;int&#39;</span></span>

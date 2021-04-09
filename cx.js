@@ -1,4 +1,4 @@
-// CodeMirror mode for Delta.
+// CodeMirror mode for C*.
 // Based on the CodeMirror Go mode by Marijn Haverbeke and others:
 //
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -14,7 +14,7 @@
 })(function (CodeMirror) {
     "use strict";
 
-    CodeMirror.defineMode("delta", function (config) {
+    CodeMirror.defineMode("cx", function (config) {
         var indentUnit = config.indentUnit;
 
         var keywords = {

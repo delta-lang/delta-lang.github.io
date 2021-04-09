@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Delta</title>
+  <title>C*</title>
   <style>
     html {
       line-height: 1.5;
@@ -150,18 +150,18 @@
 </head>
 <body>
 <link rel="stylesheet" href="lib/codemirror.css">
-<link rel="stylesheet" href="delta.css">
+<link rel="stylesheet" href="cx.css">
 <script src="lib/codemirror.js"></script>
 <link rel="stylesheet" href="index.css">
-<script src="delta.js"></script>
+<script src="cx.js"></script>
 <script src="editor.js"></script>
 
 <div class="top-nav">
-    <h1><a href="./index.html">Delta</a></h1>
+    <h1><a href="./index.html">C*</a></h1>
     <div class="links">
         <a href="./introduction.html">Documentation</a>
         <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
-        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+        <a href="https://github.com/cx-language/cx" target="_blank">GitHub</a>
     </div>
 </div>
 <div class="side-nav">
@@ -195,7 +195,7 @@
 </script>
 <h1 id="introduction">Introduction</h1>
 <p><strong>Note:</strong> This page is incomplete and parts of it may be out of date.</p>
-<p>Delta is a modern system programming language designed as an alternative to C++, C, and Rust. The primary goals of Delta are programmer productivity and performance. Memory safety is also a priority, but while Delta improves on what C++ and C have to offer, it doesn’t go as far as Rust at the detriment of ergonomics and productivity.</p>
+<p>C* is a modern system programming language designed as an alternative to C++, C, and Rust. The primary goals of C* are programmer productivity and performance. Memory safety is also a priority, but while C* improves on what C++ and C have to offer, it doesn’t go as far as Rust at the detriment of ergonomics and productivity.</p>
 <h2 id="better-compilation-model">Better compilation model</h2>
 <ul>
 <li>No header files, no forward declarations. API definitions can be generated from the source code if needed.</li>
@@ -205,7 +205,7 @@
 </ul>
 <p>All of the above should result in faster compilation times and increased programmer productivity compared to C and C++.</p>
 <h2 id="standard-build-system">Standard build system</h2>
-<p>Building a Delta project is done with a single command: <code>delta build</code>, which works out of the box without a single line of build configuration code. It finds all Delta source files in the project directory (recursively) and compiles them into an executable. Additional build information, such as dependencies, can be declared in a package configuration file. <code>delta build</code> will then download or find these dependencies, and link them into the resulting executable.</p>
+<p>Building a C* project is done with a single command: <code>cx build</code>, which works out of the box without a single line of build configuration code. It finds all C* source files in the project directory (recursively) and compiles them into an executable. Additional build information, such as dependencies, can be declared in a package configuration file. <code>cx build</code> will then download or find these dependencies, and link them into the resulting executable.</p>
 <p>No need to learn a new build system for each project, or manage project-specific build scripts, which is often the case with C and C++ projects.</p>
 <p>Long-term goal: include a built-in linting tool that runs during compilation to enforce a specific coding style, or to disallow uses of certain language features.</p>
 <h2 id="standard-package-manager">Standard package manager</h2>
@@ -216,39 +216,39 @@
 <ul>
 <li>Moves are destructive, removing the need to reset moved-from objects and call their destructors, as is required in C++.</li>
 <li>Pointers can be declared non-aliasing either individually or globally with a compiler flag.</li>
-<li>The language provides a type-safe reallocation function for arrays, instead of just allocation and deallocation functions like C++. For example, the Delta equivalent of C++’s <code>std::vector</code> makes use of this function.</li>
+<li>The language provides a type-safe reallocation function for arrays, instead of just allocation and deallocation functions like C++. For example, the C* equivalent of C++’s <code>std::vector</code> makes use of this function.</li>
 <li>Unsigned integer overflow is undefined. There are still functions to do wrapping arithmetic on both signed and unsigned integers, when needed.</li>
 <li>Compiler is allowed to reorder struct fields. This can be prevented using an attribute or compiler flag.</li>
 </ul>
-<p>Delta uses the open-source LLVM library as a code generation back-end, benefiting from all current and future optimizations implemented in LLVM.</p>
+<p>C* uses the open-source LLVM library as a code generation back-end, benefiting from all current and future optimizations implemented in LLVM.</p>
 <p>No hidden expensive operations, like implicit calls to copy constructors and copy assignment operators in C++.</p>
 <h2 id="improved-syntax">Improved syntax</h2>
-<p>Delta’s syntax is clean, consistent, and similar to the C family of languages.</p>
+<p>C*’s syntax is clean, consistent, and similar to the C family of languages.</p>
 <p>No C-style cast syntax, only C++-style casts and built-in type constructors.</p>
 <h3 id="examples-of-syntax">Examples of syntax</h3>
 <p>Syntax of a lambda returning the result of a single expression, with argument type inference:</p>
 <pre><code>// C++
 a([](auto&amp; b) { return b.c(); });
 
-// Delta
+// C*
 a(b -&gt; b.c());</code></pre>
 <p>Function pointer declaration:</p>
 <pre><code>// C/C++
 void (*f)(int);
 
-// Delta
+// C*
 void(int) f;</code></pre>
 <h2 id="simple-and-expressive-language">Simple and expressive language</h2>
 <ul>
 <li>Only structs instead of having both struct and class.</li>
-<li>Only pointers instead of having both pointers and references. Note that Delta pointers are not identical to C/C++ pointers.</li>
+<li>Only pointers instead of having both pointers and references. Note that C* pointers are not identical to C/C++ pointers.</li>
 <li>Member access always uses <code>.</code>, never <code>-&gt;</code>.</li>
 <li>Switch statement cases break automatically, avoids bugs caused by missing <code>break</code> in C and C++. Fallthrough is opt-in. Variables can also be declared inside switch cases without requiring a block.</li>
 <li>Simpler to parse, making it easier to implement syntax highlighting, auto-formatting, linting, etc.</li>
 <li>Single-parameter constructors are not implicit by default.</li>
 <li>Only one initialization syntax instead of <a href="https://en.cppreference.com/w/cpp/language/initialization">three</a>.</li>
-<li>The <code>static</code> keyword is not overloaded with 3 different meanings. Delta uses it only for non-instance members.</li>
-<li>No built-in preprocessor, at least not in the same form as C and C++. Delta only has the conditional compilation directive <code>#ifdef</code> and its friends, which can be configured only from the command-line, not from source code as can be done in C and C++ with <code>#define</code>. Although there is no preprocessor, Delta may get macros in some form if it turns out the language needs them.</li>
+<li>The <code>static</code> keyword is not overloaded with 3 different meanings. C* uses it only for non-instance members.</li>
+<li>No built-in preprocessor, at least not in the same form as C and C++. C<em> only has the conditional compilation directive <code>#ifdef</code> and its friends, which can be configured only from the command-line, not from source code as can be done in C and C++ with <code>#define</code>. Although there is no preprocessor, C</em> may get macros in some form if it turns out the language needs them.</li>
 </ul>
 <p>Semantics are more in line with usual programmer expectations:</p>
 <ul>
@@ -259,7 +259,7 @@ void(int) f;</code></pre>
 <li>Array parameters aren’t silently converted into pointers.</li>
 </ul>
 <h2 id="safer-by-default">Safer by default</h2>
-<p>Delta inserts at least the following safety checks by default:</p>
+<p>C* inserts at least the following safety checks by default:</p>
 <ul>
 <li>Array bounds checks</li>
 <li>Integer overflow checks</li>
@@ -269,7 +269,7 @@ void(int) f;</code></pre>
 <p>The compiler warns if a variable might be read before being initialized, for example when passing it as an out parameter to a C function. If you know the warning is safe to ignore, you can suppress it by assigning the keyword <code>undefined</code> to the variable.</p>
 <p>The compiler warns if a function’s return value is ignored, by default. The function can be annotated to suppress this behavior, if the return value is safe to ignore. The call site can also explicitly declare the return value as unused by assigning it to <code>_</code>, instead of casting to void. <code>_</code> is a magic identifier which is also used in other contexts to mean “ignore this value”.</p>
 <h2 id="transparent-interoperation-with-existing-c-apis">Transparent interoperation with existing C APIs</h2>
-<p>C headers can be imported directly from Delta code. The Clang API is used to parse the C headers and allow the contained declarations to be accessed from Delta code. Delta functions can be declared <code>extern "C"</code> to enable calling them from C.</p>
+<p>C headers can be imported directly from C* code. The Clang API is used to parse the C headers and allow the contained declarations to be accessed from C* code. C* functions can be declared <code>extern "C"</code> to enable calling them from C.</p>
 <p>Support for the same level of interoperability with C++ APIs is a longer-term goal.</p>
 <h2 id="improved-type-system">Improved type system</h2>
 <p>Stronger typing to help avoid bugs and to make refactoring easier:</p>
@@ -284,7 +284,7 @@ void(int) f;</code></pre>
 <li>C <code>union</code>: not type-safe, have to write a lot of wrapper code to call destructors and move/copy constructors/assignment operators.</li>
 <li>C++17 <code>std::variant</code>: not easy or elegant to use (see https://bitbashing.io/std-visit.html).</li>
 </ul></li>
-<li>Using <code>interface</code>s (Delta’s equivalent of C++ concepts) allows defining what kind of types are valid for a given template parameter when writing a generic type or function. This leads to much more readable error messages when instantiating generic types or functions with an incompatible type as the generic argument. C++-style unconstrained generic parameters are still allowed for flexibility.</li>
+<li>Using <code>interface</code>s (C*’s equivalent of C++ concepts) allows defining what kind of types are valid for a given template parameter when writing a generic type or function. This leads to much more readable error messages when instantiating generic types or functions with an incompatible type as the generic argument. C++-style unconstrained generic parameters are still allowed for flexibility.</li>
 <li>Arrays are first-class values that can be returned and passed by value. Arrays know their own size, either statically or at runtime.</li>
 <li>First-class tuples to allow e.g. returning multiple values or storing pairs of values in a container using a lightweight syntax.</li>
 </ul>

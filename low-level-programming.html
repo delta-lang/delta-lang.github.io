@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Delta</title>
+  <title>C*</title>
   <style>
     html {
       line-height: 1.5;
@@ -213,18 +213,18 @@
 </head>
 <body>
 <link rel="stylesheet" href="lib/codemirror.css">
-<link rel="stylesheet" href="delta.css">
+<link rel="stylesheet" href="cx.css">
 <script src="lib/codemirror.js"></script>
 <link rel="stylesheet" href="index.css">
-<script src="delta.js"></script>
+<script src="cx.js"></script>
 <script src="editor.js"></script>
 
 <div class="top-nav">
-    <h1><a href="./index.html">Delta</a></h1>
+    <h1><a href="./index.html">C*</a></h1>
     <div class="links">
         <a href="./introduction.html">Documentation</a>
         <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
-        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+        <a href="https://github.com/cx-language/cx" target="_blank">GitHub</a>
     </div>
 </div>
 <div class="side-nav">
@@ -258,7 +258,7 @@
 </script>
 <h1 id="low-level-programming">Low-level programming</h1>
 <h2 id="undefined"><code>undefined</code></h2>
-<p>By default Delta warns you when you use a variable before initializing it. The <code>undefined</code> keyword allows you to explicitly mark a variable as uninitialized, suppressing the warning. This is useful for example when you need to pass a variable to a C function to be initialized as an out parameter.</p>
+<p>By default C* warns you when you use a variable before initializing it. The <code>undefined</code> keyword allows you to explicitly mark a variable as uninitialized, suppressing the warning. This is useful for example when you need to pass a variable to a C function to be initialized as an out parameter.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="fu">main</span><span class="op">()</span> <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span><span class="op">[</span><span class="dv">3</span><span class="op">]</span> result <span class="op">=</span> undefined<span class="op">;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sprintf</span><span class="op">(</span>result<span class="op">,</span> <span class="st">&quot;%d&quot;</span><span class="op">,</span> <span class="dv">42</span><span class="op">);</span></span>

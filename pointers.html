@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Delta</title>
+  <title>C*</title>
   <style>
     html {
       line-height: 1.5;
@@ -213,18 +213,18 @@
 </head>
 <body>
 <link rel="stylesheet" href="lib/codemirror.css">
-<link rel="stylesheet" href="delta.css">
+<link rel="stylesheet" href="cx.css">
 <script src="lib/codemirror.js"></script>
 <link rel="stylesheet" href="index.css">
-<script src="delta.js"></script>
+<script src="cx.js"></script>
 <script src="editor.js"></script>
 
 <div class="top-nav">
-    <h1><a href="./index.html">Delta</a></h1>
+    <h1><a href="./index.html">C*</a></h1>
     <div class="links">
         <a href="./introduction.html">Documentation</a>
         <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
-        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+        <a href="https://github.com/cx-language/cx" target="_blank">GitHub</a>
     </div>
 </div>
 <div class="side-nav">
@@ -258,8 +258,8 @@
 </script>
 <h1 id="pointers">Pointers</h1>
 <p>Pointers, written <code>T*</code>, are used to refer to other objects in memory.</p>
-<p>Delta pointers are more like C++ references than C/C++ pointers: every operation on a pointer operates on the pointed-to value, except reassignment. Reassigning a pointer changes what the pointer points to.</p>
-<p>Additionally, Delta pointers cannot be null by default. To create nullable pointers, the pointer type has to be marked as <a href="nullable-types.html">nullable</a>.</p>
+<p>C* pointers are more like C++ references than C/C++ pointers: every operation on a pointer operates on the pointed-to value, except reassignment. Reassigning a pointer changes what the pointer points to.</p>
+<p>Additionally, C* pointers cannot be null by default. To create nullable pointers, the pointer type has to be marked as <a href="nullable-types.html">nullable</a>.</p>
 <p>To form a pointer, the <code>&amp;</code> operator can be used. To dereference a pointer, the <code>*</code> operator can be used.</p>
 <p>Comparing pointers also compares to pointed-to objects. To compare the memory addresses, the reference equality operators <code>===</code> and <code>!==</code> can be used.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="fu">main</span><span class="op">()</span> <span class="op">{</span></span>

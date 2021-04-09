@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Delta</title>
+  <title>C*</title>
   <style>
     html {
       line-height: 1.5;
@@ -213,18 +213,18 @@
 </head>
 <body>
 <link rel="stylesheet" href="lib/codemirror.css">
-<link rel="stylesheet" href="delta.css">
+<link rel="stylesheet" href="cx.css">
 <script src="lib/codemirror.js"></script>
 <link rel="stylesheet" href="index.css">
-<script src="delta.js"></script>
+<script src="cx.js"></script>
 <script src="editor.js"></script>
 
 <div class="top-nav">
-    <h1><a href="./index.html">Delta</a></h1>
+    <h1><a href="./index.html">C*</a></h1>
     <div class="links">
         <a href="./introduction.html">Documentation</a>
         <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
-        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+        <a href="https://github.com/cx-language/cx" target="_blank">GitHub</a>
     </div>
 </div>
 <div class="side-nav">
@@ -262,21 +262,21 @@
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span><span class="op">(</span><span class="st">&quot;Hello world&quot;</span><span class="op">);</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Like C-based languages, the program starts execution in the <code>main</code> function. In this program we don’t need to return anything from main, so the return type is declared as <code>void</code>. If we wanted to specify an exit status, we could change the return type to <code>int</code> and add a return statement.</p>
-<p>To compile and run the code from the command line, we can put the code in a file called for example <code>hello.delta</code>, and then do:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">delta</span> hello.delta</span>
+<p>To compile and run the code from the command line, we can put the code in a file called for example <code>hello.cx</code>, and then do:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cx</span> hello.cx</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./hello</span> <span class="co"># or hello.exe on Windows</span></span></code></pre></div>
-<p>Or we can let the Delta compiler do both steps using the <code>run</code> command:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">delta</span> run hello.delta</span></code></pre></div>
+<p>Or we can let the C* compiler do both steps using the <code>run</code> command:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cx</span> run hello.cx</span></code></pre></div>
 <p>If we use the <code>run</code> command, the executable file <code>hello</code> will not be created.</p>
 <h2 id="syntax">Syntax</h2>
-<p>The syntax of Delta is mostly similar to the C family of languages, but there are some stylistic differences worth noting:</p>
+<p>The syntax of C* is mostly similar to the C family of languages, but there are some stylistic differences worth noting:</p>
 <ul>
 <li>Semicolons are optional.</li>
 <li>Parentheses around conditions of control flow statements (if, for, while, switch) are optional.</li>
 </ul>
 <p>However, to attract attention to more important differences, this documentation uses semicolons and parentheses even if not required.</p>
 <h3 id="comments">Comments</h3>
-<p>Delta has two kinds of comments:</p>
+<p>C* has two kinds of comments:</p>
 <ul>
 <li>Line comments, starting with <code>//</code> and extending until the end of the line.</li>
 <li>Block comments, enclosed within <code>/*</code> and <code>*/</code>, with the ability to be nested.</li>

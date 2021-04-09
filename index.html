@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Delta</title>
+  <title>C*</title>
   <style>
     html {
       line-height: 1.5;
@@ -213,119 +213,75 @@
 </head>
 <body>
 <link rel="stylesheet" href="lib/codemirror.css">
-<link rel="stylesheet" href="delta.css">
+<link rel="stylesheet" href="cx.css">
 <script src="lib/codemirror.js"></script>
 <link rel="stylesheet" href="index.css">
-<script src="delta.js"></script>
+<script src="cx.js"></script>
 <script src="editor.js"></script>
 
 <div class="top-nav">
-    <h1><a href="./index.html">Delta</a></h1>
+    <h1><a href="./index.html">C*</a></h1>
     <div class="links">
         <a href="./introduction.html">Documentation</a>
         <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
-        <a href="https://github.com/delta-lang/delta" target="_blank">GitHub</a>
+        <a href="https://github.com/cx-language/cx" target="_blank">GitHub</a>
     </div>
 </div>
 <div class="intro">
-<p>Delta is a programming language with the goal of making you more productive at writing efficient software. It supports both low-level and high-level programming, as well as multiple paradigms.</p>
+<p>C* (pronounced "C star") is a C-based hybrid low-level/high-level programming language focused on runtime performance and developer productivity (in this order of priority). It is unopinionated and flexible, supporting multiple paradigms and styles of programming, without friction or a steep learning curve.</p>
 </div>
 <div class="features">
-<section id="performance-first-approach-to-common-programming-patterns" class="block">
-<h4>Performance-first approach to common programming patterns</h4>
-<ul>
-<li>Non-allocating subtype polymorphism and dynamic dispatch using tagged unions</li>
-<li>Non-allocating map(), filter(), etc. using lazy iterators</li>
-<li>Non-allocating string and array operations using slices</li>
-</ul>
+<section id="performance" class="block">
+<h4>Performance</h4>
+C* compiles to efficient native code using LLVM. There's no garbage collection, hidden allocations, or runtime. C* takes a performance-first approach to common programming patterns, such as subtyping (tagged unions), map/filter/reduce (lazy iterators), and string/array handling (slices). Even fast compilation is a goal of C*.
 </section>
-<section id="full-control-over-what-your-code-is-doing" class="block">
-<h4>Full control over what your code is doing</h4>
-<ul>
-<li>No hidden allocations, no implicit deep copies, no runtime</li>
-<li>Support for ownership-based, reference-counted, and manual memory management</li>
-<li>Reference-like pointers, and array pointers supporting pointer arithmetic</li>
-</ul>
+<section id="expressiveness" class="block">
+<h4>Expressiveness</h4>
+C* is a simple yet expressive language, featuring a strong type system with compile-time null-safety. It has all the features you'd except from a systems-level programming language, like pointers, RAII, templates, type inference, smart pointers, trait-like interfaces, and sum types. There's preprocessor, macros, or metaprogramming.
 </section>
-<section id="speed-up-the-edit-compile-run-cycle" class="block">
-<h4>Speed up the edit-compile-run cycle</h4>
-<ul>
-<li>Clean syntax without unnecessary boilerplate</li>
-<li>No compilation bottlenecks like header files or heavy meta-programming</li>
-<li>Helpful diagnostics, prefer warnings over errors that get in the way of refactoring</li>
-</ul>
-</section>
-<section id="run-fast" class="block">
-<h4>Run fast</h4>
-<ul>
-<li>Efficient native machine code optimized using LLVM</li>
-<li>More optimization opportunities: destructive moves, undefined integer overflow, etc.</li>
-<li>Follows the "pay only for what you use" principle</li>
-</ul>
-</section>
-<section id="fail-fast" class="block">
-<h4>Fail fast</h4>
-<ul>
-<li>Strongly typed, implicit conversions disallowed by default</li>
-<li>Compile-time null-safety using nullable types</li>
-<li>Optional arithmetic overflow checks and array bounds checks</li>
-</ul>
-</section>
-<section id="use-existing-skills-workflows-and-libraries" class="block">
-<h4>Use existing skills, workflows, and libraries</h4>
-<ul>
-<li>Minimal learning curve for C and C++ programmers</li>
-<li>Doesn't force a specific style or paradigm, lets you choose what suits your project best</li>
-<li>Ability to import C headers and use C libraries directly</li>
-</ul>
+<section id="productivity" class="block">
+<h4>Productivity</h4>
+C* allows effortless language interop: import C headers directly without the need for bindings. The clean and familiar C-like syntax avoids unnecessary boilerplate, allowing you to get instantly productive without a steep learning curve. Debug builds check for buffer or arithmetic overflows by default.
 </section>
 </div>
 <h4 id="example-code">Example code</h4>
-<div class="sourceCode" id="cb1"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Mandelbrot set visualizer</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Complex<span class="op">:</span> Copyable <span class="op">{</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> r<span class="op">;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> i<span class="op">;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> <span class="fu">abs</span><span class="op">()</span> <span class="op">{</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> r <span class="op">*</span> r <span class="op">+</span> i <span class="op">*</span> i<span class="op">;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>Complex <span class="kw">operator</span><span class="op">+(</span>Complex<span class="op">*</span> a<span class="op">,</span> Complex<span class="op">*</span> b<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="fu">Complex</span><span class="op">(</span>a<span class="op">.</span><span class="fu">r</span> <span class="op">+</span> b<span class="op">.</span><span class="fu">r</span><span class="op">,</span> a<span class="op">.</span><span class="fu">i</span> <span class="op">+</span> b<span class="op">.</span><span class="fu">i</span><span class="op">);</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>Complex <span class="kw">operator</span><span class="op">*(</span>Complex<span class="op">*</span> a<span class="op">,</span> Complex<span class="op">*</span> b<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="fu">Complex</span><span class="op">(</span>a<span class="op">.</span><span class="fu">r</span> <span class="op">*</span> b<span class="op">.</span><span class="fu">r</span> <span class="op">-</span> a<span class="op">.</span><span class="fu">i</span> <span class="op">*</span> b<span class="op">.</span><span class="fu">i</span><span class="op">,</span> a<span class="op">.</span><span class="fu">r</span> <span class="op">*</span> b<span class="op">.</span><span class="fu">i</span> <span class="op">+</span> a<span class="op">.</span><span class="fu">i</span> <span class="op">*</span> b<span class="op">.</span><span class="fu">r</span><span class="op">);</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="fu">main</span><span class="op">()</span> <span class="op">{</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">for</span> <span class="op">(</span><span class="dt">var</span> y <span class="op">=</span> <span class="op">-</span><span class="fl">0.9</span><span class="op">;</span> y <span class="op">&lt;</span> <span class="fl">0.9</span><span class="op">;</span> y <span class="op">+=</span> <span class="fl">0.09</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> <span class="op">(</span><span class="dt">var</span> x <span class="op">=</span> <span class="op">-</span><span class="fl">1.4</span><span class="op">;</span> x <span class="op">&lt;</span> <span class="fl">0.4</span><span class="op">;</span> x <span class="op">+=</span> <span class="fl">0.045</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            <span class="dt">var</span> z <span class="op">=</span> <span class="fu">Complex</span><span class="op">(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> <span class="op">(</span><span class="dt">var</span> _ <span class="kw">in</span> <span class="dv">0</span><span class="op">...</span><span class="fu">100</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                z <span class="op">=</span> z <span class="op">*</span> z <span class="op">+</span> <span class="fu">Complex</span><span class="op">(</span>x<span class="op">,</span> y<span class="op">);</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>            <span class="dt">var</span> chars <span class="op">=</span> <span class="st">&quot; .:-;!/&gt;)|&amp;IH%*#&quot;</span><span class="op">;</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>            <span class="dt">var</span> index <span class="op">=</span> <span class="fu">clamp</span><span class="op">(</span><span class="dt">int</span><span class="op">(</span>z<span class="op">.</span><span class="fu">abs</span><span class="op">()</span> <span class="op">*</span> <span class="dv">50</span><span class="op">),</span> <span class="dv">0</span><span class="op">,</span> chars<span class="op">.</span><span class="fu">size</span><span class="op">()</span> <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>            <span class="fu">print</span><span class="op">(</span>chars<span class="op">[</span>index<span class="op">]);</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span><span class="op">(</span><span class="ch">&#39;\n&#39;</span><span class="op">);</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>// A recursive directory listing program, demonstrating the usage of C APIs.
+
+import "dirent.h";
+
+void listdir(string name, int indent) {
+    var dir = opendir(StringBuffer(name).cString());
+    if (!dir) return;
+    defer closedir(dir);
+
+    while (var entry = readdir(dir)) {
+        if (entry.d_name == "." || entry.d_name == "..")
+            continue;
+
+        var path = name + '/' + entry.d_name;
+        println(" ".repeat(indent), path);
+
+        if (entry.d_type == DT_DIR) {
+            listdir(string(path), indent + 4);
+        }
+    }
+}
+
+void main() {
+    listdir(".", 0);
+}</span></code></pre></div>
 <div class="features">
-<section id="planned-features" class="block wide">
-<h4>Planned features</h4>
+<section id="future-plans" class="block wide">
+<h4>Future plans</h4>
 <ul>
-<li>Built-in dependency management and build system</li>
-<li>Built-in linter to enforce project-specific conventions</li>
+<li>Ecosystem and tooling improvements</li>
+<li>Documentation</li>
+<li>Built-in dependency manager</li>
+<li>Optional runtime checks to ensure memory safety, such as integrating AddressSanitizer</li>
+<li>Good error handling model</li>
+<li>Concurrency support</li>
 <li>Fast compilation</li>
-<li>Static reflection</li>
-<li>Error handling</li>
-<li>Builtin vector types</li>
-<li>Optional compiler-enforced memory-safe subset</li>
-<li>Optional runtime checks to alleviate lack of memory safety</li>
+<li>Linter to enforce project-specific coding conventions</li>
 </ul>
 </section>
 </div>

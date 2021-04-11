@@ -220,30 +220,30 @@
 <script src="editor.js"></script>
 
 <div class="top-nav">
-    <h1><a href="./index.html">C*</a></h1>
+    <h1><a href="./">C*</a></h1>
     <div class="links">
         <a href="./introduction.html">Documentation</a>
         <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
         <a href="https://github.com/cx-language/cx" target="_blank">GitHub</a>
     </div>
 </div>
-<div class="intro">
-<p>C* (pronounced "C star") is a C-based hybrid low-level/high-level programming language focused on runtime performance and developer productivity (in this order of priority). It is unopinionated and flexible, supporting multiple paradigms and styles of programming, without friction or a steep learning curve.</p>
-</div>
-<div class="features">
+<section class="intro">
+<p>C* (pronounced "C star") is a C-based hybrid low-level/high-level programming language focused on runtime performance and developer productivity (in this order of priority). The language is simple and unopinionated, supporting imperative, generic, data-oriented, functional, and object-oriented programming.</p>
+</section>
+<section class="features">
 <section id="performance" class="block">
 <h4>Performance</h4>
-C* compiles to efficient native code using LLVM. There's no garbage collection, hidden allocations, or runtime. C* takes a performance-first approach to common programming patterns, such as subtyping (tagged unions), map/filter/reduce (lazy iterators), and string/array handling (slices). Even fast compilation is a goal of C*.
+C* compiles to efficient native code using LLVM. There's no garbage collection, hidden allocation, or runtime. C* takes a performance-first approach to common programming patterns, such as subtyping (tagged unions), map/filter/reduce (lazy iterators), and string/array handling (slices). Even fast compilation is a goal of C*.
 </section>
 <section id="expressiveness" class="block">
 <h4>Expressiveness</h4>
-C* is a simple yet expressive language, featuring a strong type system with compile-time null-safety. It has all the features you'd except from a systems-level programming language, like pointers, RAII, templates, type inference, smart pointers, trait-like interfaces, and sum types. There's preprocessor, macros, or metaprogramming.
+C* is a simple yet expressive language, featuring a strong type system with compile-time null-safety, sum types, and trait-like interfaces. It has both high-level programming constructs and support for systems-level programming, such as pointers, destructors, and generics. There's no preprocessor, macros, or metaprogramming.
 </section>
 <section id="productivity" class="block">
 <h4>Productivity</h4>
-C* allows effortless language interop: import C headers directly without the need for bindings. The clean and familiar C-like syntax avoids unnecessary boilerplate, allowing you to get instantly productive without a steep learning curve. Debug builds check for buffer or arithmetic overflows by default.
+C* has great C interop: C headers can be imported directly without the need for bindings. The clean and familiar C-like syntax avoids unnecessary boilerplate, and allows C/C++ programmers to instantly get productive without a steep learning curve. Debug builds check for buffer or arithmetic overflows by default.
 </section>
-</div>
+</section>
 <h4 id="example-code">Example code</h4>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cs"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>// A recursive directory listing program, demonstrating the usage of C APIs.
 
@@ -270,20 +270,8 @@ void listdir(string name, int indent) {
 void main() {
     listdir(".", 0);
 }</span></code></pre></div>
-<div class="features">
-<section id="future-plans" class="block wide">
-<h4>Future plans</h4>
-<ul>
-<li>Ecosystem and tooling improvements</li>
-<li>Documentation</li>
-<li>Built-in dependency manager</li>
-<li>Optional runtime checks to ensure memory safety, such as integrating AddressSanitizer</li>
-<li>Good error handling model</li>
-<li>Concurrency support</li>
-<li>Fast compilation</li>
-<li>Linter to enforce project-specific coding conventions</li>
-</ul>
+<section class="bottom-links">
+<a href="./introduction.html">Learn more</a> <a href="https://github.com/cx-language/cx/tree/main/examples">More examples</a>
 </section>
-</div>
 </body>
 </html>

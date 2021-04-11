@@ -157,7 +157,7 @@
 <script src="editor.js"></script>
 
 <div class="top-nav">
-    <h1><a href="./index.html">C*</a></h1>
+    <h1><a href="./">C*</a></h1>
     <div class="links">
         <a href="./introduction.html">Documentation</a>
         <a href="https://discord.gg/hsDbW9p" target="_blank">Discord</a>
@@ -182,8 +182,7 @@
         <li><a href="./interfaces.html">Interfaces</a></li>
         <li><a href="./generics.html">Generics</a></li>
         <li><a href="./low-level-programming.html">Low-level programming</a></li>
-        <li><a href="./std.html">Standard library reference</a></li>
-        <!-- <li><a href="./design.html">Design document</a></li> -->
+        <li><a href="./std.html">Standard library</a></li>
         <!-- <li><a href="./spec.html">Specification</a></li> -->
     </ul>
 </div>
@@ -194,50 +193,67 @@
     link.className = "active";
 </script>
 <h1 id="introduction">Introduction</h1>
-<p><strong>Note:</strong> This page is incomplete and parts of it may be out of date.</p>
-<p>C* is a modern system programming language designed as an alternative to C++, C, and Rust. The primary goals of C* are programmer productivity and performance. Memory safety is also a priority, but while C* improves on what C++ and C have to offer, it doesn’t go as far as Rust at the detriment of ergonomics and productivity.</p>
-<h2 id="better-compilation-model">Better compilation model</h2>
+<p>C* (pronounced “C star”) is a C-based hybrid low-level/high-level general-purpose programming language. It is designed for applications where runtime performance and programmer productivity matter. The language is simple and unopinionated, supporting imperative, generic, data-oriented, functional, and object-oriented programming. The language also aims to support interoperability and side-by-side usage with existing C/C++ code to allow gradual adoption.</p>
+<h2 id="goals">Goals</h2>
+<p>The primary goals of C* are:</p>
 <ul>
-<li>No header files, no forward declarations. API definitions can be generated from the source code if needed.</li>
-<li>Programs are compiled as a whole, instead of compiling each file separately and then linking them together. This should make compiling faster as it leaves more room for optimizing the build process, and linking is usually quite slow.</li>
-<li>Libraries are imported as a whole, instead of importing individual files from them, freeing the user of the library from having to figure out which file to import for a specific feature, and freeing the library author from keeping the library’s file structure the same for backwards compatibility.</li>
-<li>Every library is automatically wrapped inside their own namespace, no need to explicitly declare the namespace in each source file.</li>
+<li>Improve productivity and expressivity compared to C/C++.</li>
+<li>Improve performance of standard library and common programming patterns (such as runtime polymorphism) compared to C/C++.</li>
+<li>Fix various design flaws and footguns present in C/C++.</li>
+<li>Don’t change too much from C/C++, especially in terms of syntax, so that C/C++ programmers are immediately productive in C*.</li>
+<li>Don’t introduce any “big new ideas” or dogma. Instead, focus on what has been proven to work and implement those in the best way possible.</li>
 </ul>
-<p>All of the above should result in faster compilation times and increased programmer productivity compared to C and C++.</p>
-<h2 id="standard-build-system">Standard build system</h2>
-<p>Building a C* project is done with a single command: <code>cx build</code>, which works out of the box without a single line of build configuration code. It finds all C* source files in the project directory (recursively) and compiles them into an executable. Additional build information, such as dependencies, can be declared in a package configuration file. <code>cx build</code> will then download or find these dependencies, and link them into the resulting executable.</p>
-<p>No need to learn a new build system for each project, or manage project-specific build scripts, which is often the case with C and C++ projects.</p>
-<p>Long-term goal: include a built-in linting tool that runs during compilation to enforce a specific coding style, or to disallow uses of certain language features.</p>
-<h2 id="standard-package-manager">Standard package manager</h2>
-<p>Using and distributing third-party libraries should be made as easy as possible. For example, there should be no platform-specific dependency or release management. Adding a dependency or publishing a library means running a single command.</p>
-<p>Initially supports fetching dependencies from Git repositories. Other version control systems, binary distributions, system package managers, etc. will be supported later.</p>
-<h2 id="faster-than-c-and-c">Faster than C and C++</h2>
-<p>More optimization opportunities:</p>
+<h2 id="why-c">Why C*?</h2>
+<p>C++ is a huge and complex language that has accumulated many problems over the years, for example:</p>
 <ul>
-<li>Moves are destructive, removing the need to reset moved-from objects and call their destructors, as is required in C++.</li>
-<li>Pointers can be declared non-aliasing either individually or globally with a compiler flag.</li>
-<li>The language provides a type-safe reallocation function for arrays, instead of just allocation and deallocation functions like C++. For example, the C* equivalent of C++’s <code>std::vector</code> makes use of this function.</li>
-<li>Unsigned integer overflow is undefined. There are still functions to do wrapping arithmetic on both signed and unsigned integers, when needed.</li>
-<li>Compiler is allowed to reorder struct fields. This can be prevented using an attribute or compiler flag.</li>
+<li>No standard build system.</li>
+<li>No standard way to manage dependencies.</li>
+<li>Header files and the code duplication they cause.</li>
+<li>Functions and types must be declared before using them, resulting in forward declarations as a language feature.</li>
+<li>Source code compatibility with C.</li>
+<li>Slow compilation times for large projects.</li>
+<li>Syntax is overly verbose in some cases (think lambdas, smart pointers).</li>
+<li>No compile-time reflection (ever wanted to iterate over the values of an enum?).</li>
+<li>Too many implicit conversion between data types, which cause bugs too easily.</li>
+<li>No proper tagged union type (<code>std::variant</code> <a href="https://bitbashing.io/std-visit.html">is too tedious</a>).</li>
+<li>Poor support for functional programming.</li>
+<li>Deep copying is implicit, while moving is explicit (in most cases).</li>
+<li>Switch case-statement fallthrough is implicit, requires explicit <code>break</code> to avoid.</li>
+<li>No named parameters.</li>
+<li>Writing cross-platform code is harder than it needs to be (mostly as a result of different platforms and compilers doing things differently).</li>
+<li>Has both pointers and references, and problems associated with both of them (e.g. no way to express non-nullable reassignable pointers, without resorting to a class like <code>std::reference_wrapper</code>). No non-nullable smart pointers.</li>
+<li>String literals have array type (should be string slices).</li>
+<li>No buffer or arithmetic overflow checks in debug builds.</li>
+<li>Standard library severely lacking:
+<ul>
+<li>No standard file system API (added in C++17).</li>
+<li>No Unicode-aware string type.</li>
+<li>No string slice type (added in C++17).</li>
+<li>No array slice type.</li>
+<li>Some very common functionality missing, like a string split function.</li>
+<li>All standard library algorithms take pairs of iterators rather than ranges.</li>
+</ul></li>
+<li>Many minor design flaws kept for backwards compatibility.</li>
+<li>… and <a href="http://www.yosefk.com/c++fqa/defective.html">more</a>.</li>
 </ul>
-<p>C* uses the open-source LLVM library as a code generation back-end, benefiting from all current and future optimizations implemented in LLVM.</p>
-<p>No hidden expensive operations, like implicit calls to copy constructors and copy assignment operators in C++.</p>
-<h2 id="improved-syntax">Improved syntax</h2>
-<p>C*’s syntax is clean, consistent, and similar to the C family of languages.</p>
-<p>No C-style cast syntax, only C++-style casts and built-in type constructors.</p>
-<h3 id="examples-of-syntax">Examples of syntax</h3>
-<p>Syntax of a lambda returning the result of a single expression, with argument type inference:</p>
-<pre><code>// C++
-a([](auto&amp; b) { return b.c(); });
-
-// C*
-a(b -&gt; b.c());</code></pre>
-<p>Function pointer declaration:</p>
-<pre><code>// C/C++
-void (*f)(int);
-
-// C*
-void(int) f;</code></pre>
+<p>It is clear that we can’t keep adding more and more features to C++ and writing new code in it forever. Sooner or later it will be replaced by another language or languages (for writing new code).</p>
+<blockquote>
+<p>“Within C++, there is a much smaller and cleaner language struggling to get out.” — <em>Bjarne Stroustrup</em></p>
+</blockquote>
+<p>C* is trying to be that language.</p>
+<p>Let’s take a look at another popular systems programming language, Rust, which also solves the majority of the above problems. Rust differs from C* in the following aspects:</p>
+<ul>
+<li>Guaranteed memory safety is useful for certain types of projects, but for non-safety-critical projects it comes at a cost in productivity (e.g. fighting the borrow checker) and language complexity (e.g. lifetime annotations). Also for preventing bugs caused by memory unsafety, there are great tools like AddressSanitizer which help enormously (and could be built in to the language itself).</li>
+<li>Syntax deviates too much from C++ for little or no benefit.</li>
+<li>Module system could be better (e.g. to not have to explicitly declare a project’s module structure in the source code instead of the compiler automatically determining it from the project’s directory structure).</li>
+<li>The language is verbose in some cases. (e.g. <code>let mut</code> instead of <code>var</code>, etc.).</li>
+<li>Too few implicit conversions (e.g. cannot assign value of type <code>T</code> directly to a variable of type <code>Option&lt;T&gt;</code>, instead must wrap it in <code>Some(...)</code>).</li>
+<li>Naming convention for standard library and language keywords favors cryptic abbreviated names, instead of clear non-abbreviated ones.</li>
+<li>The Rust compiler complains if you use non-snake-case names for variables or functions, or non-camel-case names for types. C*, like C++, should not force programmers to use a specific style.</li>
+<li>Forces the programmer to write very explicit code (e.g. <a href="https://www.reddit.com/r/rust/comments/3kmrl8/new_to_rust_the_language_seems_really_verbose_is/?ref=share&amp;ref_source=link">console I/O</a>).</li>
+<li>Numeric literals don’t work well in generic code (<a href="https://www.reddit.com/r/rust/comments/2zu3eo/what_is_rust_bad_at/cpmgbrx/">example</a>).</li>
+</ul>
+<p>So in summary, C* is intended to be used over Rust for non-safety-critical applications where programmer productivity, ergonomics, and performance are more important than Rust’s safety and explicitness.</p>
 <h2 id="simple-and-expressive-language">Simple and expressive language</h2>
 <ul>
 <li>Only structs instead of having both struct and class.</li>
@@ -248,14 +264,15 @@ void(int) f;</code></pre>
 <li>Single-parameter constructors are not implicit by default.</li>
 <li>Only one initialization syntax instead of <a href="https://en.cppreference.com/w/cpp/language/initialization">three</a>.</li>
 <li>The <code>static</code> keyword is not overloaded with 3 different meanings. C* uses it only for non-instance members.</li>
-<li>No built-in preprocessor, at least not in the same form as C and C++. C<em> only has the conditional compilation directive <code>#ifdef</code> and its friends, which can be configured only from the command-line, not from source code as can be done in C and C++ with <code>#define</code>. Although there is no preprocessor, C</em> may get macros in some form if it turns out the language needs them.</li>
+<li>No built-in preprocessor, at least not in the same form as C and C++. C* only has the conditional compilation directive <code>#ifdef</code> and its friends, which can be configured only from the command-line, not from source code as can be done in C and C++ with <code>#define</code>. Although there is no preprocessor, C* may get macros in some form if it turns out the language needs them.</li>
+<li>No <code>const</code> (except for C interop).</li>
 </ul>
 <p>Semantics are more in line with usual programmer expectations:</p>
 <ul>
 <li>Read-only use of <code>operator[]</code> on maps doesn’t insert a default-constructed element.</li>
 <li>Inline functions are actually inlined, at least in debug mode.</li>
 <li>The integer types <code>int</code> and <code>uint</code> are at least 32 bits.</li>
-<li>String literals are of type <code>StringRef</code>, so they know their size and have all string manipulation member functions.</li>
+<li>String literals have a dedicated type, so they know their own size and have all the string manipulation member functions.</li>
 <li>Array parameters aren’t silently converted into pointers.</li>
 </ul>
 <h2 id="safer-by-default">Safer by default</h2>
@@ -268,9 +285,6 @@ void(int) f;</code></pre>
 <p>These checks can be disabled individually or globally to make the code run faster.</p>
 <p>The compiler warns if a variable might be read before being initialized, for example when passing it as an out parameter to a C function. If you know the warning is safe to ignore, you can suppress it by assigning the keyword <code>undefined</code> to the variable.</p>
 <p>The compiler warns if a function’s return value is ignored, by default. The function can be annotated to suppress this behavior, if the return value is safe to ignore. The call site can also explicitly declare the return value as unused by assigning it to <code>_</code>, instead of casting to void. <code>_</code> is a magic identifier which is also used in other contexts to mean “ignore this value”.</p>
-<h2 id="transparent-interoperation-with-existing-c-apis">Transparent interoperation with existing C APIs</h2>
-<p>C headers can be imported directly from C* code. The Clang API is used to parse the C headers and allow the contained declarations to be accessed from C* code. C* functions can be declared <code>extern "C"</code> to enable calling them from C.</p>
-<p>Support for the same level of interoperability with C++ APIs is a longer-term goal.</p>
 <h2 id="improved-type-system">Improved type system</h2>
 <p>Stronger typing to help avoid bugs and to make refactoring easier:</p>
 <ul>
@@ -303,38 +317,121 @@ void(int) f;</code></pre>
 <li>Standard library provides math constants such as Pi.</li>
 </ul></li>
 </ul>
-<h2 id="language-features">Language features</h2>
-<h3 id="destructuring">Destructuring</h3>
-<p>While iterating a map, the key and value from the key-value tuple can be destructured into separate variables:</p>
-<pre><code>for (var (key, value) in myMap) {
-    ...
-}</code></pre>
-<p>Destructure the return value of a function returning multiple values as a tuple:</p>
-<pre><code>(int, bool) foo() {
-    var a = 42;
-    var b = false;
-    return (a, b);
-}
-
-void main() {
-    var (a, b) = foo();
-}</code></pre>
-<h3 id="compile-time-reflection">Compile-time reflection</h3>
-<p>Should cover common use cases such as iteration over enum cases, getting enum case string representations, printing the active type of a union, etc. Should follow the “pay only for what you use” principle.</p>
-<h3 id="named-arguments">Named arguments</h3>
-<p>An optional way to avoid cryptic call sites like <code>foo(true, false)</code> by labeling the arguments with the corresponding parameter name, with the compiler checking that the argument labels match the parameter names, e.g. <code>foo(a: true, b: false)</code>. Consequently, named arguments don’t have to be in same order as the parameters. This also enables function overloading on parameter names.</p>
-<h3 id="defer-statement">Defer statement</h3>
-<p>The <code>defer</code> keyword allows declaring arbitrary code, such as resource cleanup functions, to be executed when exiting the current scope. In C++ one has to write an RAII wrapper class to achieve this.</p>
-<h3 id="type-inference">Type inference</h3>
-<p>Type inference for local and global variables, to improve productivity and make the code more amenable to type changes when refactoring. The strong type system still has your back.</p>
+<h2 id="improved-syntax">Improved syntax</h2>
+<ul>
+<li>C*’s syntax is clean, consistent, and similar to the C family of languages.</li>
+<li>No C-style cast syntax, only C++-style casts and built-in type constructors.</li>
+<li>Simpler lambda/closure syntax with argument type inference by default.</li>
+<li>More readable syntax for function pointer types.</li>
+<li>Array size is defined next to the array element type.</li>
+<li>Semicolons are optional.</li>
+</ul>
+<h2 id="better-compilation-model">Better compilation model</h2>
+<ul>
+<li>No header files, no forward declarations. API definitions can be generated from the source code if needed.</li>
+<li>Programs are compiled as a whole, instead of compiling each file separately and then linking them together. This should make compiling faster as it leaves more room for optimizing the build process, and linking is usually quite slow.</li>
+<li>Libraries are imported as a whole, instead of importing individual files from them, freeing the user of the library from having to figure out which file to import for a specific feature, and freeing the library author from keeping the library’s file structure the same for backwards compatibility.</li>
+<li>Every library is automatically wrapped inside their own namespace, no need to explicitly declare the namespace in each source file.</li>
+</ul>
+<p>All of the above should result in faster compilation times and increased programmer productivity compared to C and C++.</p>
+<h2 id="standard-build-system">Standard build system</h2>
+<p>Building a C* project is done with a single command: <code>cx build</code>, which works out of the box without a single line of build configuration code. It finds all C* source files in the project directory (recursively) and compiles them into an executable. Additional build information, such as dependencies, can be declared in a package configuration file. <code>cx build</code> will then download or find these dependencies, and link them into the resulting executable.</p>
+<p>No need to learn a new build system for each project, or manage project-specific build scripts, which is often the case with C and C++ projects.</p>
+<p>Long-term goal: include a built-in linting tool that runs during compilation to enforce a specific coding style, or to disallow uses of certain language features.</p>
+<h2 id="standard-package-manager">Standard package manager</h2>
+<p>Using and distributing third-party libraries should be made as easy as possible. For example, there should be no platform-specific dependency or release management. Adding a dependency or publishing a library means running a single command.</p>
+<p>Initially supports fetching dependencies from Git repositories. Other version control systems, binary distributions, system package managers, etc. will be supported later.</p>
+<h2 id="faster-than-c">Faster than C++</h2>
+<p>More optimization opportunities:</p>
+<ul>
+<li>Moves are destructive, removing the need to reset moved-from objects and call their destructors, as is required in C++.</li>
+<li>Pointers can be declared non-aliasing either individually or globally with a compiler flag.</li>
+<li>The language provides a type-safe reallocation function for arrays, instead of just allocation and deallocation functions like C++. For example, the C* equivalent of C++’s <code>std::vector</code> makes use of this function.</li>
+<li>Unsigned integer overflow is undefined. There are still functions to do wrapping arithmetic on both signed and unsigned integers, when needed.</li>
+<li>Compiler is allowed to reorder struct fields. This can be prevented using an attribute or compiler flag.</li>
+</ul>
+<p>C* uses the open-source LLVM library as a code generation back-end, benefiting from all current and future optimizations implemented in LLVM.</p>
+<p>No hidden expensive operations, such as implicit calls to copy constructors and copy assignment operators like in C++.</p>
+<h2 id="transparent-interoperation-with-existing-c-apis">Transparent interoperation with existing C APIs</h2>
+<p>C headers can be imported directly from C* code. The Clang API is used to parse the C headers and allow the contained declarations to be accessed from C* code. C* functions can be declared <code>extern "C"</code> to enable calling them from C.</p>
+<p>Support for some level of interoperability with C++ APIs is a longer-term goal.</p>
+<h2 id="additional-language-features">Additional language features</h2>
+<p><strong>Destructuring</strong>: While iterating a map, the key and value from the key-value pair can be destructured into separate variables. Functions can return multiple return values, which can then be destructured into separate variables at the call site.</p>
+<p><strong>Compile-time reflection</strong> to cover common use cases such as iteration over enum cases, getting enum case string representations, printing the active type of a union, etc. Should follow the “pay only for what you use” principle.</p>
+<p><strong>Named arguments</strong> as an optional way to avoid cryptic call sites like <code>foo(true, false)</code> by labeling the arguments with the corresponding parameter name, with the compiler checking that the argument labels match the parameter names, e.g. <code>foo(a: true, b: false)</code>. Consequently, named arguments don’t have to be in same order as the parameters. This also enables function overloading on parameter names.</p>
+<p><strong>Defer statement</strong> to allow declaring arbitrary code, such as resource cleanup functions, to be executed when exiting the current scope. In C++ one has to write an RAII wrapper class to achieve this.</p>
+<p><strong>Simple type inference</strong> for local and global variables, to improve productivity and make the code more readable, as well as more amenable to type changes when refactoring. The strong type system ensures that type inference will not cause any unexpected typing issues.</p>
 <h2 id="and-all-the-good-parts-from-c-and-c">…and all the good parts from C and C++</h2>
 <ul>
 <li>Performance and control.</li>
 <li>Pay only for what you use.</li>
 <li>No garbage collection.</li>
 <li>Don’t force the programmer to use a specific style.</li>
-<li>Have some implicit conversions and other features for convenience.</li>
+<li>Have some implicit conversions and other features for convenience. Allow the programmer to customize these to their preference via compiler warnings and/or linter options.</li>
 <li>Backwards compatibility eventually once the language design has stabilized.</li>
 </ul>
+<h2 id="design-principles">Design principles</h2>
+<ul>
+<li><a href="https://wiki.c2.com/?ProgressiveDisclosure">Progressive disclosure</a> of complexity, i.e. it should be easy to write most of the code (the parts that aren’t performance bottlenecks) to perform reasonably efficiently, and the language should provide full control to optimize the bottlenecks.</li>
+<li>Code compiled in release mode must be as fast as possible on modern hardware.</li>
+<li>Compilation in debug mode should be as fast as possible to speed up the edit-compile-run cycle during development.</li>
+<li>Be able to interoperate with C++ code to a certain degree, to avoid having to write a C wrapper for everything. However, this should not restrict the design of the language.</li>
+<li>Safe by default, but allow disabling safety checks (both individually and collectively) easily where necessary. E.g. array access bounds checking, integer overflow detection.</li>
+<li>The language should be relatively simple, but most of the perceived simplicity should come from the aforementioned progressive disclosure principle. For simple things: “There should be one — and preferably only one — obvious way to do it.”</li>
+<li>Should scale well, e.g. fast build times, easy greppability of function/type/variable definitions.</li>
+<li>Should be familiar and attractive to C++ and C developers. I.e. try not to change too much. Only change things that are an objective improvement from C++ or otherwise well justified.</li>
+</ul>
+<h2 id="comparison-with-related-projects">Comparison with related projects</h2>
+<h3 id="difference-between-c-and-rust">Difference between C* and Rust</h3>
+<ul>
+<li><p>Compile-time memory safety is useful for certain types of projects, but it comes at a cost in language complexity (e.g. lifetime annotations) and productivity (e.g. having to spend extra development time to satisfy the borrow checker). This is not desirable in all projects, and for them C* might be more appropriate. C*’s long-term goal for ensuring memory safety is to support proven runtime verification tools such as AddressSanitizer. These tools could be built in to the compiler to make it easy to enable them e.g. for debug builds.</p>
+<p>Memory safety violations caught by AddressSanitizer are probably also easier to understand than the sometimes very cryptic compile errors produced by Rust’s borrow checker, since you can see the exact runtime conditions that caused the violation in your debugger.</p></li>
+<li><p>Rust code is by design very explicit. While this is useful for code where you care about every little detail, every instance of possible runtime overhead, and every error condition, it is counterproductive for code where you don’t care about such things. To solve this divide, C* allows the programmer to configure individual compiler warnings. For example, warnings for safe implicit conversions can be enabled or disabled based on the project’s requirements. This is a common theme in C*: the compiler is adaptable to the user’s needs.</p></li>
+<li><p>To call C functions from Rust, the functions have to be declared in the Rust code. C* allows importing C headers directly. The compiler delegates to the Clang API to parse the C declarations from those headers.</p></li>
+<li><p>Rust’s module system has been described as confusing<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. C*’s module system is designed to be simple, easy to understand, and straightforward to use: the compiler infers the module structure from the project’s directory structure. Source files from the same module don’t need to explicitly imported.</p></li>
+<li><p>C* syntax is closer to the C/C++ syntax than Rust is. For C/C++ developers, this makes the learning curve of C* less steep and helps them get comfortable and productive more quickly.</p></li>
+<li><p>The naming conventions of the Rust language and standard libraries favor very short abbreviated names such as <code>Vec</code>, <code>str</code>, <code>i32</code>. C* uses less-abbreviated names such as <code>List</code>, <code>string</code>, <code>int32</code>.</p></li>
+<li><p>C* has potential for faster compile times than Rust, due to not having to do things like borrow checking.</p></li>
+<li><p>Rust doesn’t allow function overloading. C* does.</p></li>
+</ul>
+<h3 id="difference-between-c-and-zig">Difference between C* and Zig</h3>
+<ul>
+<li><p>Zig doesn’t have operator overloading due to its “no hidden control flow” principle. C* allows operator overloading.</p></li>
+<li><p>Zig doesn’t have a dedicated string type or string concatenation operator.</p></li>
+<li><p>Zig doesn’t have a method call syntax.</p></li>
+<li><p>Zig is very explicit about errors, allocation, <code>pub</code>ness, <code>const</code>ness.</p></li>
+<li><p>In Zig, types are values that are passed as <code>comptime</code> arguments, returned from <code>comptime</code> functions, etc. In other words, syntactically they are treated the same as runtime values. C* keeps types and runtime values separate, opting for a more familiar C++-like syntax.</p></li>
+<li><p>Zig is a more low-level-focused language, competing primarily with C. C* is more of a hybrid low-level/high-level language, competing primarily with C++.</p></li>
+<li><p>Zig has no automatic type narrowing for accessing a nullable value inside a matching null check, instead opting for an additional syntax: <code>if (optional_foo) |foo| { ... }</code></p></li>
+</ul>
+<h3 id="difference-between-c-and-jai">Difference between C* and Jai</h3>
+<ul>
+<li><p>C* has compile-time null-safety and nullable types.</p></li>
+<li><p>C* has method call syntax.</p></li>
+<li><p>C* has interfaces, which can be used e.g. as type parameter bounds in generic code for better error messages.</p></li>
+<li><p>C* has automatic importing of C headers, implemented using the Clang API.</p></li>
+<li><p>C* doesn’t require importing standard library modules explicitly.</p></li>
+<li><p>C* doesn’t require importing files from the same project. All C* files in the project source directory are by default assumed to belong to the project as a “convention over configuration”.</p></li>
+<li><p>C* has a more familiar C-style syntax, which:</p>
+<ul>
+<li>allows C/C++ programmers to be immediately productive with it</li>
+<li>allows existing syntax tools such as syntax highlighters and code formatters to be used with little to no changes.</li>
+</ul></li>
+</ul>
+<h2 id="resources-for-further-c-language-design">Resources for further C* language design</h2>
+<ul>
+<li><a href="https://www.reddit.com/r/cpp/comments/7lvteh/what_are_the_weakest_points_of_c_in_your_opinion/?st=JBM8MFRN&amp;sh=30098ea8">“What are the weakest points of C++ in your opinion?” on Reddit</a></li>
+<li><a href="https://www.reddit.com/r/cpp/comments/7639sf/what_would_you_change_in_c_if_backwards/?ref=share&amp;ref_source=link">“What would you change in C++ if backwards compatibility was not an issue?” on Reddit</a></li>
+<li><a href="https://eev.ee/blog/2016/12/01/lets-stop-copying-c/">“Let’s stop copying C” by Eevee</a></li>
+<li><a href="https://www.reddit.com/r/cpp/comments/4py6sl/hypothetically_which_standard_library_warts_would/?ref=share&amp;ref_source=link">“Hypothetically, which standard library warts would you like to see fixed in a”std2“?” on Reddit</a></li>
+<li><a href="https://www.reddit.com/r/cpp/comments/2e52t4/if_you_had_the_power_to_completely_overhaul_c/?ref=share&amp;ref_source=link">“If you had the power to completely overhaul C++, what would you change?” on Reddit</a></li>
+<li><a href="https://hackernoon.com/considerations-for-programming-language-design-a-rebuttal-5fb7ef2fd4ba">“Considerations for programming language design: a rebuttal”</a></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p><a href="https://boats.gitlab.io/blog/post/2017-01-04-the-rust-module-system-is-too-confusing/" target="_blank">https://boats.gitlab.io/blog/post/2017-01-04-the-rust-module-system-is-too-confusing/</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 </body>
 </html>

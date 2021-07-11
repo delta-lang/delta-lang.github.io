@@ -17,6 +17,7 @@ curl -L "https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VE
 cmake . \
     -G 'Unix Makefiles' \
     -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_UNITY_BUILD=OFF \
     -DCMAKE_PREFIX_PATH=$PWD/$LLVM_TARBALL
 make -j
 
